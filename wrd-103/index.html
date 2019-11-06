@@ -1,0 +1,797 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8"/>
+        <script src="//cdn.jsdelivr.net/phaser/2.2.2/phaser.min.js"></script>
+        <title>WRD 103 - Manifesto Project</title>
+        <style type="text/css">
+            body {
+                margin: 0;
+            }
+        </style>
+    </head>
+    <body>
+        <script>
+            // Game instance
+            var game = new Phaser.Game(
+                540 * window.devicePixelRatio,
+                853 * window.devicePixelRatio,
+                Phaser.CANVAS,
+                'phaser-example',
+                {
+                    preload: preload,
+                    create: create,
+                    render: render,
+                    update: update,
+                }
+            );
+            
+			
+            // Globals
+			var gameState     = 'title';
+            var scaleRatio    = window.devicePixelRatio;
+			var combo         = 0;
+            var playerScaleX  = 1;
+            var playerTargetX = -1;
+            var player        = null;
+            var coinGroup     = null;
+            var coinEmitter   = null;
+            var tapEmitter    = null;
+            var ground        = null;
+			var bmpText       = null;
+			var shdText       = null;
+			var cloudGroup    = null;
+            
+			
+			var clouds = {
+				'cloud-0': null,
+				'cloud-1': null,
+			};
+			
+            
+            var messages = {
+				'popup-0': 'Before you can play this game,\nyou will be bombarded with intrusive\npopups (whether you like it or not).\nNow tap agree and continue.',
+				'popup-b': 'Note: This game is best played on\nmobile! If you can, please navigate to\njosephnavarro.github.io/wrd-103/\non your smartphone!',
+                'popup-1': 'Microtransactions lead innocent\npeople to develop gambling issues.',
+                'popup-2': 'Microtransactions hurt those\nwho already suffer from their\nown gambling addictions.',
+                'popup-3': 'Microtransactions prey on children\nwho are unaware of the value\nof their parents\' money.',
+                'popup-4': 'Microtransactions have only one\npurpose: to take advantage of\na game\'s paying customers.',
+                'popup-5': 'Microtransactions have\nabsolutely NO place in our\nvideo games.',
+				'popup-6': 'Thanks for not paying!\nNow please enjoy the game.',
+            };
+            
+            
+            var texts = {
+				'popup-0': null,
+				'popup-b': null,
+                'popup-1': null,
+                'popup-2': null,
+                'popup-3': null,
+                'popup-4': null,
+                'popup-5': null,
+                'popup-6': null,
+            };
+            
+            
+            var buttons = {
+				'popup-0': null,
+				'popup-b': null,
+                'popup-1': null,
+                'popup-2': null,
+                'popup-3': null,
+                'popup-4': null,
+                'popup-5': null,
+                'popup-6': null,
+            };
+            
+            
+            var popups = {
+				'popup-0': null,
+				'popup-b': null,
+                'popup-1': null,
+                'popup-2': null,
+                'popup-3': null,
+                'popup-4': null,
+                'popup-5': null,
+                'popup-6': null,
+            };
+            
+            var tweens = {
+				'popup-0': null,
+				'popup-b': null,
+                'popup-1': null,
+                'popup-2': null,
+                'popup-3': null,
+                'popup-4': null,
+                'popup-5': null,
+                'popup-6': null,
+				'cloud-0': null,
+				'cloud-1': null,
+            };
+            
+            var opened = {
+				'popup-0': false,
+				'popup-b': false,
+                'popup-1': false,
+                'popup-2': false,
+                'popup-3': false,
+                'popup-4': false,
+                'popup-5': false,
+                'popup-6': false,
+            };
+            
+            var seens = {
+				'popup-0': null,
+				'popup-b': null,
+                'popup-1': null,
+                'popup-2': null,
+                'popup-3': null,
+                'popup-4': null,
+                'popup-5': null,
+                'popup-6': null,
+            };
+            
+            
+            /**
+             *  Creates a popup window.
+             */
+            function createPopup(tag, popupGraphic, buttonGraphic, buttonX=-70, buttonY=48, anchorX=0.333, anchorY=0.6)
+            {
+                popups[tag] = game.add.sprite(
+                    game.world.centerX, 
+                    game.world.centerY, 
+                    popupGraphic
+                );
+                popups[tag].anchor.set(0.5);
+                
+                // Add button
+                var button = game.make.button(
+                    buttonX, 
+					buttonY, 
+					buttonGraphic, 
+                    function()
+                    {
+                        closePopup(tag)
+                    },
+                    this, 
+                    0, 0, 1
+                );
+                
+                button.inputEnabled = false;
+                button.input.useHandCursor = true;
+                buttons[tag] = button;
+                
+                // Add text
+                var style = {
+                    font: "24px Arial",
+                    fontWeight: "bolder",
+                    fill: "000000",
+                    wordWrap: true,
+                    wordWrapWidth: popups[tag].width,
+                    align: "center"
+                };
+				
+                var text = game.make.text(0, 0, messages[tag], style);
+                text.anchor.set(anchorX, anchorY);
+                texts[tag] = text;
+                
+                popups[tag].scale.setTo(0);
+                popups[tag].addChild(text);
+                popups[tag].addChild(button);
+            }
+            
+			/**
+             *  Adds background sprite.
+             */
+            function addBackground()
+            {
+                var background = game.add.sprite(0, 0, 'background');
+                background.width = game.world.width;
+                background.height = game.world.height;
+            }
+			
+			/**
+			 *  Adds cloud sprite.
+			 */
+			function addCloud(tag, startX)
+			{
+				clouds[tag] = cloudGroup.create(startX, 0, 'cloud');
+				clouds[tag].height = game.world.width / clouds[tag].width * clouds[tag].height;
+				clouds[tag].width = game.world.width;
+				
+				tweens[tag] = game.add.tween(clouds[tag].position)
+				.to(
+					{
+						x: startX - clouds[tag].width
+					},
+					20000,
+					Phaser.Easing.Linear.None,
+					true
+				);
+				
+				tweens[tag].onComplete.add(
+					function ()
+					{
+						clouds[tag].position.x = startX;
+					},
+					this
+				);
+				
+				tweens[tag].loop(true);	
+			}
+			
+			/**
+			 *  Adds clouds group.
+			 */
+			function addCloudGroup()
+			{
+				cloudGroup = game.add.group();
+			}
+            
+			/**
+             *  Adds a coin.
+             */
+            function addCoin(x, y)
+            {
+                var coin = coinGroup.create(x, y, 'coin');
+                coin.body.bounce.y = 0.2;
+                coin.body.collideWorldBounds = true;
+                coin.body.gravity.y = 600;
+                coin.animations.add(
+                    'idle',
+                    [
+                        0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
+                        10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
+                        20, 21, 22, 23, 24, 25, 26, 27, 28, 29,
+                        30, 31, 32, 33, 34, 35, 36, 37, 38, 39,
+                        40, 41, 42, 43, 44, 45, 46, 47, 48, 49,
+                        50, 51, 52, 53, 54, 55, 56, 57, 58, 59,
+                        60, 61
+                    ],
+                    60, true
+                );
+                coin.scale.setTo(scaleRatio, scaleRatio);
+                coin.animations.play('idle');
+            }
+			
+			/**
+             *  Adds coin particle emitter.
+             */
+            function addCoinEmitter()
+            {
+				if (coinEmitter !== null)
+				{
+					coinEmitter.destroy();
+					coinEmitter = null;
+				}
+				
+                coinEmitter = game.add.emitter(0, 0, 12);
+                coinEmitter.makeParticles('coin-emit');
+                coinEmitter.setAlpha(0.3, 0.8);
+                coinEmitter.setRotation(0, 0);
+                coinEmitter.autoScale = true;
+                
+				coinEmitter.setScale(
+                    scaleRatio,
+                    scaleRatio,
+                    scaleRatio,
+                    scaleRatio
+                );
+            }
+           
+			/**
+             *  Adds coin group.
+             */
+            function addCoinGroup()
+            {
+                coinGroup = game.add.group();
+                coinGroup.enableBody = true;
+            }
+            
+            /**
+             *  Adds cursor key control.
+             */
+            function addControls()
+            {
+                game.input.onDown.add(
+                    function (pointer)
+                    {
+						if (seens['popup-6'])
+						{
+							playerTargetX = pointer.x;
+						}
+                    },
+                    this
+                );
+            }
+			
+			/**
+             *  Adds the ground.
+             */
+            function addGround()
+            {
+                ground = game.add.group();
+                ground.enableBody = true;
+                
+				// Add ground to cover the entire horizontal field
+                var newGround;
+                for (var x = 0; x <= game.world.width; x += 384)
+                {
+                    newGround = ground.create(x, game.world.height - 64 * scaleRatio, 'ground');
+                    newGround.scale.setTo(scaleRatio, scaleRatio);
+                    newGround.body.immovable = true;
+                }
+            }
+			
+			/**
+             *  Adds player.
+             */
+            function addPlayer(x, y)
+            {
+                // Add sprite proper
+                player = game.add.sprite(x, y, 'char');
+                player.scale.setTo(0.25 * scaleRatio);
+                player.anchor.setTo(0.5);
+                playerScaleX = player.scale.x;
+
+                // Enable physics
+                game.physics.arcade.enable(player);
+                player.body.bounce.y = 0.25;
+                player.body.gravity.y = 600;
+                player.body.collideWorldBounds = true;
+                                
+                // Add animations
+                player.animations.add('idle', [0, 1], 3, true);
+                player.animations.add('jump-1', [2], 10, true);
+                player.animations.add('jump-2', [3], 10, true);
+                player.animations.add('right', [4, 5, 6, 7], 10, true);
+                player.animations.add('left', [8, 9, 10, 11], 10, true);
+
+                // Initialize with idle animation
+                player.animations.play('idle');
+            }
+            
+            /**
+             *  Adds tap particle emitter.
+             */
+            function addTapEmitter()
+            {
+				if (tapEmitter !== null)
+				{
+					tapEmitter.destroy();
+					tapEmitter = null;
+				}
+				
+                tapEmitter = game.add.emitter(0, 0, 12);
+                tapEmitter.makeParticles('tap', [0, 1, 2, 3]);
+                tapEmitter.setAlpha(0.3, 0.8);
+                tapEmitter.setRotation(0, 0);
+                tapEmitter.autoScale = true;
+                
+				tapEmitter.setScale(
+                    scaleRatio,
+                    scaleRatio,
+                    scaleRatio,
+                    scaleRatio
+                );
+                
+                game.input.onDown.add(tapBurst, this);
+            }
+			
+			/**
+			 *  Adds title sprite.
+			 */
+			function addTitle()
+			{
+				var title = game.add.sprite(0, 0, 'title');
+				title.height = game.world.width / title.width;
+				title.width = game.world.width;
+				title.scale.setTo(scaleRatio, scaleRatio);
+			}
+			
+			/**
+			 *  Begin "game" state.
+			 */
+			function beginGame()
+			{
+				// Set game state
+				gameState = 'game';
+
+				// Create relevant objects
+	    		startPhysics();
+                addBackground();
+                addGround();
+                addCoinGroup();
+                addControls();
+                addPlayer(32, 100);
+                addCoin(100, 100);
+				addCloudGroup();
+				
+				// Add clouds at top
+				addCloud('cloud-0', 0);
+				addCloud('cloud-1', game.world.width * scaleRatio);
+				
+				// Create relevant popup windows
+                createPopup('popup-1', 'box-1', 'button-1');
+                createPopup('popup-2', 'box-2', 'button-2');
+                createPopup('popup-3', 'box-3', 'button-3');
+                createPopup('popup-4', 'box-4', 'button-4');
+                createPopup('popup-5', 'box-5', 'button-5');
+                createPopup('popup-6', 'box-0', 'button-0', -128, 75, 0.45);
+				
+				// Add particle emitters
+				addCoinEmitter();
+                addTapEmitter();
+				
+				// Spawn popup window
+				popups['popup-1'].scale.setTo(0);
+                openPopup('popup-1');
+
+				// Create bitmap text
+				shdText = game.add.bitmapText(10, 10, 'shadow', 'Combo:', 28 * scaleRatio);
+				bmpText = game.add.bitmapText(8, 8, 'font', 'Combo:', 28 * scaleRatio);
+			}
+			
+			/**
+			 *  Begin "title" state.
+			 */
+			function beginTitle()
+			{
+				addTitle();
+				addTapEmitter();
+			}
+            
+			/**
+             *  Closes popup window.
+             */
+            function closePopup(tag)
+            {
+                if (tweens[tag] && tweens[tag].isRunning 
+                    || popups[tag].scale.x === 0 
+                    || popups[tag].scale.y === 0)
+                {
+                    return;
+                }
+                else
+                {
+                    buttons[tag].inputEnabled = false;
+                    tweens[tag] = game.add.tween(popups[tag].scale);
+                    tweens[tag].to(
+                        {
+                            x: 0,
+                            y: 0
+                        },
+                        500,
+                        Phaser.Easing.Elastic.In,
+                        true
+                    );
+                    tweens[tag].onComplete.add(
+                        function()
+                        {
+                            seens[tag] = true;
+                        },
+                        this
+                    );
+                }
+            }
+			
+			/**
+             *  Processes a single player-to-coin collision.
+             */
+            function collectCoin(player, coin)
+            {
+                //console.log(coin.x + ',' + coin.y);
+				
+				// Explode effect on collect
+                coinEmitter.x = coin.x + 20 * scaleRatio;
+                coinEmitter.y = coin.y + 20 * scaleRatio;
+                coinEmitter.explode(500, 12);
+                coinEmitter.forEach(
+                    function (element)
+                    {
+                        element.scale.setTo(scaleRatio, scaleRatio);
+                    }
+                );
+                
+				// Delete the coin object
+                coin.kill();
+				
+				// Increment score
+				combo += 1;
+                
+				// Randomly add a new coin somewhere
+                addCoin(Math.random() * game.world.width, 0);
+            }
+			
+			/**
+             *  Opens a popup window
+             */
+            function openPopup(tag)
+            {
+                if (tweens[tag] && tweens[tag].isRunning 
+                    || popups[tag].scale.x !== 0 
+                    || popups[tag].scale.y !== 0)
+                {
+                    return;
+                }
+                else
+                {
+                    buttons[tag].inputEnabled = true;
+                    buttons[tag].input.useHandCursor = true;
+                    tweens[tag] = game.add.tween(popups[tag].scale).to(
+                        {
+                            x: 0.7 * scaleRatio,
+                            y: 0.7 * scaleRatio
+                        },
+                        500,
+                        Phaser.Easing.Elastic.Out,
+                        true
+                    );
+                    tweens[tag].onComplete.add(
+                        function()
+                        { 
+                            opened[tag] = true;
+                        },
+                        this
+                    );
+                }
+            }
+            
+            /**
+             *  Starts physics system.
+             */
+            function startPhysics()
+            {
+                game.physics.startSystem(Phaser.Physics.ARCADE);
+            }
+			
+			/**
+             *  Callback for tap particle emitter.
+             */
+            function tapBurst(pointer)
+            {
+                tapEmitter.x = pointer.x;
+                tapEmitter.y = pointer.y;
+                tapEmitter.explode(500, 6);
+                tapEmitter.children.forEach(
+                    function (element)
+                    {
+                        element.scale.setTo(scaleRatio, scaleRatio);
+                    }
+                );
+            }
+			
+			/**
+             *  Processes all coin-to-ground collisions.
+             */
+            function updateCoinGroundCollisions()
+            {
+                var hit = game.physics.arcade.collide(coinGroup, ground);
+				if (hit)
+				{
+					combo = 0;
+				}
+            }
+			
+			/**
+             *  Processes all player-to-coin collisions.
+             */
+            function updatePlayerCoinCollisions()
+            {
+                game.physics.arcade.overlap(player, coinGroup, collectCoin, null, this);
+            }
+			
+			/**
+             *  Processes all player-to-ground collisions.
+             */
+            function updatePlayerGroundCollisions()
+            {
+                game.physics.arcade.collide(player, ground);
+            }
+			
+			/**
+             *  Updates player movement.
+             */
+            function updatePlayerMovement()
+            {
+				if (seens['popup-5'])
+				{
+					player.body.velocity.x = 0;
+					
+					var targetX = playerTargetX - (player.body.width >> 1);
+					
+					if (targetX >= 0)
+					{
+						var px = player.body.position.x
+						var dx = px - targetX;
+						var elapsed = game.time.physicsElapsed;
+						
+						console.log(dx);
+						
+						if (dx > 1)
+						{
+							// Move left
+							dx = -300 * scaleRatio;
+							player.body.velocity.x = dx;
+							player.animations.play('right');
+							player.scale.x = -playerScaleX;
+							
+							if (px + dx * elapsed < targetX)
+							{
+								player.body.position.x = targetX;
+								player.body.velocity.x = 0;
+								player.animations.play('idle');
+								playerTargetX = -1;
+							}
+						}
+						else if (dx < 1)
+						{
+							// Move right
+							dx = 300 * scaleRatio;
+							player.body.velocity.x = dx;
+							player.animations.play('right');
+							player.scale.x = playerScaleX;
+							
+							if (px + dx * elapsed > targetX)
+							{
+								player.body.position.x = targetX;
+								player.body.velocity.x = 0;
+								player.animations.play('idle');
+								playerTargetX = -1;
+							}
+						}
+						else
+						{
+							player.animations.play('idle');
+							playerTargetX = -1;
+						}
+					}    
+					else
+					{
+						player.animations.play('idle');
+						playerTargetX = -1;
+					}                
+				}
+            }
+			
+			/**
+             *  Updates popup windows.
+             */
+            function updatePopup()
+            {
+                if (seens['popup-1'] && !opened['popup-2'])
+                {                                                                                                     
+                    openPopup('popup-2');
+                }
+                else if (seens['popup-2'] && !opened['popup-3'])
+                {
+                    openPopup('popup-3');
+                }
+                else if (seens['popup-3'] && !opened['popup-4'])
+                {
+                    openPopup('popup-4');
+                }
+                else if (seens['popup-4'] && !opened['popup-5'])
+                {
+                    openPopup('popup-5');
+                }
+				else if (seens['popup-5'] && !opened['popup-6'])
+                {
+                    openPopup('popup-6');
+                }
+            }
+			
+			/**
+			 *  Updates popup windows for title state.
+			 */
+			function updatePopupTitle()
+			{
+			    // Title game state
+				    if (tweens['popup-0'] === null)
+					{						
+						popups['popup-0'].scale.setTo(0);
+						openPopup('popup-0');
+					    addTapEmitter();
+				    }
+					else if (seens['popup-0'] && tweens['popup-b'] === null)
+					{
+						openPopup('popup-b');
+					}
+					else if (seens['popup-b'])
+					{
+						beginGame();
+					}
+			}
+			
+            /**
+             *  Preload callback.
+             */
+            function preload()
+            {
+                game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+				
+				// Preload bitmap font
+				game.load.bitmapFont('font', 'assets/font.png', 'assets/font.fnt');
+				game.load.bitmapFont('shadow', 'assets/shadow.png', 'assets/shadow.fnt');
+                
+                // Preload button textures
+                game.load.spritesheet('button-0', 'assets/button-1.png', 290, 52);
+                game.load.spritesheet('button-1', 'assets/button-1.png', 290, 52);
+                game.load.spritesheet('button-2', 'assets/button-2.png', 290, 52);
+                game.load.spritesheet('button-3', 'assets/button-3.png', 290, 52);
+                game.load.spritesheet('button-4', 'assets/button-4.png', 290, 52);
+                game.load.spritesheet('button-5', 'assets/button-5.png', 290, 52);
+                                
+                // Preload message box textures
+                game.load.image('box-0', 'assets/box-0.png');
+                game.load.image('box-1', 'assets/box-1.png');
+                game.load.image('box-2', 'assets/box-2.png');
+                game.load.image('box-3', 'assets/box-3.png');
+                game.load.image('box-4', 'assets/box-4.png');
+                game.load.image('box-5', 'assets/box-5.png');
+                
+                // Preload background and title textures
+				game.load.image('cloud', 'assets/cloud.png');
+                game.load.image('title', 'assets/title.png');
+                game.load.image('background', 'assets/background.png');
+                
+                // Preload coin textures
+                game.load.spritesheet('coin', 'assets/coin.png', 48, 48);
+                
+                // Preload character textures
+                game.load.spritesheet('char', 'assets/char.png', 307, 447);
+                
+                // Preload ground textures
+                game.load.image('ground', 'assets/ground.png');
+                
+                // Preload emitter textures
+                game.load.spritesheet('coin-emit', 'assets/coin-emit.png', 40, 40);
+                game.load.spritesheet('tap', 'assets/tap.png', 40, 40);
+            }
+            
+            /**
+             *  Create callback.
+             */
+            function create()
+            {
+                game.stage.backgroundColor = '#000000';
+				beginTitle();
+				createPopup('popup-0', 'box-0', 'button-0', -128, 75, 0.45);
+				createPopup('popup-b', 'box-0', 'button-0', -128, 75, 0.45);
+            }
+            
+            /**
+             *  Render callback.
+             */
+            function render()
+            {
+            }
+			
+            /**
+             *  Update callback.
+             */
+            function update()
+            {
+				if (gameState == 'title')
+				{
+					updatePopupTitle();
+				}
+			    else if (gameState == 'game')
+				{
+					// Proper game state
+					updatePopup();
+					updatePlayerMovement();
+					updatePlayerGroundCollisions();
+					updatePlayerCoinCollisions();
+					updateCoinGroundCollisions();
+					
+					var text = 'Combo: ' + Math.round(combo);
+					bmpText.text = text;
+					shdText.text = text;
+				}
+            }
+            
+        </script>
+        <div id="phaser-example"></div>
+    </body>
+</html>
