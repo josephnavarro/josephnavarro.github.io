@@ -12,6 +12,10 @@ var game = new Phaser.Game(
 )
 
 // Globals
+var emitter;
+var spriteGroup;
+
+
 var person = {
 	"image": '',
 	"age": 0,
@@ -273,6 +277,28 @@ function generateLocation()
 }
 
 
+// Generates a particle burst
+function particleBurst()
+{
+	emitter = spriteGroup.add(game.add.emitter(124, 275, 10));
+	emitter.makeParticles('star');
+	emitter.gravity = 0;
+	emitter.alpha = 0.8;
+	emitter.start(true, 1000, null, 50);
+
+	game.add.tween(emitter).to(
+		{
+			alpha: 0
+		},
+		1000,
+		Phaser.Easing.Linear.Out,
+		true
+	);
+
+	spriteGroup.sendToBack(emitter);
+}
+
+
 // Randomly generates an individual
 function generatePerson()
 {
@@ -305,12 +331,18 @@ function generatePerson()
 	ethnicityText.text = ethnicity;
 	locationText.text = location;
 	religionText.text = religion;
+
+	// Particle burst
+	particleBurst();
 }
 
 
 // Preload callback
 function preload()
 {
+	// Particle image
+	game.load.image('star', 'assets/particles/star.png');
+
 	// Font
 	game.load.bitmapFont(
 		'font',
@@ -351,25 +383,67 @@ function update()
 function create()
 {
 	// Set background color
-	game.stage.backgroundColor = '#f0f0f0';
+	game.stage.backgroundColor = '#a0cff0';
+
+	// Sprite group
+	spriteGroup = game.add.group();
+
+	// Add emitter
+	emitter = spriteGroup.add(game.add.emitter(48 +75, 275, 10));
+	emitter.makeParticles('star');
+	emitter.gravity = 0;
 
 	// Add person sprite
-	sprite = game.add.sprite(48, 200, 'sprite');
+	sprite = spriteGroup.add(game.add.sprite(48, 200, 'sprite'));
 
 	// Add bitmap text objects
-	gameLabel = game.add.bitmapText(48, 48, 'font', 'People You May Meet in the U.S.', 48);
-	ageLabel = game.add.bitmapText(200, 200, 'font', 'Age: ', 24);
-	genderLabel = game.add.bitmapText(200, 232, 'font', 'Gender at Birth: ', 24);
-	locationLabel = game.add.bitmapText(200, 264, 'font', 'Location: ', 24);
-	ethnicityLabel = game.add.bitmapText(200, 296, 'font', 'Ethnicity: ', 24);
-	religionLabel = game.add.bitmapText(200, 328, 'font', 'Religion: ', 24);
-	promptLabel = game.add.bitmapText(200, 424, 'font', 'Tap to see different people!', 34);
+	gameLabel = spriteGroup.add(
+		game.add.bitmapText(
+			48, 48, 'font', 'People You May Meet in the U.S.', 48
+		)
+	);
 
-	ageText = game.add.bitmapText(400, 200, 'font', '', 24);
-	genderText = game.add.bitmapText(400, 232, 'font', '', 24);
-	locationText = game.add.bitmapText(400, 264, 'font', '', 24);
-	ethnicityText = game.add.bitmapText(400, 296, 'font', '', 24);
-	religionText = game.add.bitmapText(400, 328, 'font', '', 24);
+	ageLabel = spriteGroup.add(
+		game.add.bitmapText(
+			200, 200, 'font', 'Age: ', 24
+		)
+	);
+
+	genderLabel = spriteGroup.add(
+		game.add.bitmapText(
+			200, 232, 'font', 'Gender at Birth: ', 24
+		)
+	);
+
+	locationLabel = spriteGroup.add(
+		game.add.bitmapText(
+			200, 264, 'font', 'Location: ', 24
+		)
+	);
+
+	ethnicityLabel = spriteGroup.add(
+		game.add.bitmapText(
+			200, 296, 'font', 'Ethnicity: ', 24
+		)
+	);
+
+	religionLabel = spriteGroup.add(
+		game.add.bitmapText(
+			200, 328, 'font', 'Religion: ', 24
+		)
+	);
+
+	promptLabel = spriteGroup.add(
+		game.add.bitmapText(
+			200, 424, 'font', 'Tap to see different people!', 34
+		)
+	);
+
+	ageText = spriteGroup.add(game.add.bitmapText(400, 200, 'font', '', 24));
+	genderText = spriteGroup.add(game.add.bitmapText(400, 232, 'font', '', 24));
+	locationText = spriteGroup.add(game.add.bitmapText(400, 264, 'font', '', 24));
+	ethnicityText = spriteGroup.add(game.add.bitmapText(400, 296, 'font', '', 24));
+	religionText = spriteGroup.add(game.add.bitmapText(400, 328, 'font', '', 24));
 
 	// Generate people
 	game.input.onDown.add(generatePerson, this);
