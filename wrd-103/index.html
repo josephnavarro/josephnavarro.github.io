@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8"/>
-        <script src="//cdn.jsdelivr.net/phaser/2.6.2/phaser.min.js"></script>
+        <script src="//cdn.jsdelivr.net/phaser/2.2.2/phaser.min.js"></script>
         <title>WRD 103 - Manifesto Project</title>
         <style type="text/css">
             body {
@@ -25,8 +25,8 @@
                     update: update,
                 }
             );
-            
-			
+
+
             // Globals
 			var gameState     = 'title';
             var scaleRatio    = window.devicePixelRatio;
@@ -41,14 +41,13 @@
 			var bmpText       = null;
 			var shdText       = null;
 			var cloudGroup    = null;
-            
-			
+
+
 			var clouds = {
 				'cloud-0': null,
-				'cloud-1': null,
 			};
-			
-            
+
+
             var messages = {
 				'popup-0': 'Before you can play this game,\nyou will be bombarded with intrusive\npopups (whether you like it or not).\nNow tap agree and continue.',
 				'popup-b': 'Note: This game is best played on\nmobile! If you can, please navigate to\njosephnavarro.github.io/wrd-103/\non your smartphone!',
@@ -59,8 +58,8 @@
                 'popup-5': 'Microtransactions have\nabsolutely NO place in our\nvideo games.',
 				'popup-6': 'Thanks for not paying!\nNow please enjoy the game.',
             };
-            
-            
+
+
             var texts = {
 				'popup-0': null,
 				'popup-b': null,
@@ -71,8 +70,8 @@
                 'popup-5': null,
                 'popup-6': null,
             };
-            
-            
+
+
             var buttons = {
 				'popup-0': null,
 				'popup-b': null,
@@ -83,8 +82,8 @@
                 'popup-5': null,
                 'popup-6': null,
             };
-            
-            
+
+
             var popups = {
 				'popup-0': null,
 				'popup-b': null,
@@ -95,7 +94,7 @@
                 'popup-5': null,
                 'popup-6': null,
             };
-            
+
             var tweens = {
 				'popup-0': null,
 				'popup-b': null,
@@ -105,10 +104,8 @@
                 'popup-4': null,
                 'popup-5': null,
                 'popup-6': null,
-				'cloud-0': null,
-				'cloud-1': null,
             };
-            
+
             var opened = {
 				'popup-0': false,
 				'popup-b': false,
@@ -119,7 +116,7 @@
                 'popup-5': false,
                 'popup-6': false,
             };
-            
+
             var seens = {
 				'popup-0': null,
 				'popup-b': null,
@@ -130,37 +127,37 @@
                 'popup-5': null,
                 'popup-6': null,
             };
-            
-            
+
+
             /**
              *  Creates a popup window.
              */
             function createPopup(tag, popupGraphic, buttonGraphic, buttonX=-70, buttonY=48, anchorX=0.333, anchorY=0.6)
             {
                 popups[tag] = game.add.sprite(
-                    game.world.centerX, 
-                    game.world.centerY, 
+                    game.world.centerX,
+                    game.world.centerY,
                     popupGraphic
                 );
                 popups[tag].anchor.set(0.5);
-                
+
                 // Add button
                 var button = game.make.button(
-                    buttonX, 
-					buttonY, 
-					buttonGraphic, 
+                    buttonX,
+					buttonY,
+					buttonGraphic,
                     function()
                     {
                         closePopup(tag)
                     },
-                    this, 
+                    this,
                     0, 0, 1
                 );
-                
+
                 button.inputEnabled = false;
                 button.input.useHandCursor = true;
                 buttons[tag] = button;
-                
+
                 // Add text
                 var style = {
                     font: "24px Arial",
@@ -170,16 +167,16 @@
                     wordWrapWidth: popups[tag].width,
                     align: "center"
                 };
-				
+
                 var text = game.make.text(0, 0, messages[tag], style);
                 text.anchor.set(anchorX, anchorY);
                 texts[tag] = text;
-                
+
                 popups[tag].scale.setTo(0);
                 popups[tag].addChild(text);
                 popups[tag].addChild(button);
             }
-            
+
 			/**
              *  Adds background sprite.
              */
@@ -189,37 +186,21 @@
                 background.width = game.world.width;
                 background.height = game.world.height;
             }
-			
+
 			/**
 			 *  Adds cloud sprite.
 			 */
 			function addCloud(tag, startX)
 			{
-				clouds[tag] = cloudGroup.create(startX, 0, 'cloud');
-				clouds[tag].height = game.world.width / clouds[tag].width * clouds[tag].height;
-				clouds[tag].width = game.world.width;
-				
-				tweens[tag] = game.add.tween(clouds[tag].position)
-				.to(
-					{
-						x: startX - clouds[tag].width
-					},
-					20000,
-					Phaser.Easing.Linear.None,
-					true
-				);
-				
-				tweens[tag].onComplete.add(
-					function ()
-					{
-						clouds[tag].position.x = startX;
-					},
-					this
-				);
-				
-				tweens[tag].loop(true);	
+				clouds[tag] = game.add.tileSprite(startX, 0, game.world.width, game.world.width / 1920 * 986, 'cloud');
+				clouds[tag].tileScale.setTo(game.world.width / 1920, game.world.width / 1920);
+
+
+				console.log(clouds[tag].x, clouds[tag].y);
+
+				cloudGroup.add(clouds[tag]);
 			}
-			
+
 			/**
 			 *  Adds clouds group.
 			 */
@@ -227,7 +208,7 @@
 			{
 				cloudGroup = game.add.group();
 			}
-            
+
 			/**
              *  Adds a coin.
              */
@@ -253,7 +234,7 @@
                 coin.scale.setTo(scaleRatio, scaleRatio);
                 coin.animations.play('idle');
             }
-			
+
 			/**
              *  Adds coin particle emitter.
              */
@@ -264,13 +245,13 @@
 					coinEmitter.destroy();
 					coinEmitter = null;
 				}
-				
+
                 coinEmitter = game.add.emitter(0, 0, 12);
                 coinEmitter.makeParticles('coin-emit');
                 coinEmitter.setAlpha(0.3, 0.8);
                 coinEmitter.setRotation(0, 0);
                 coinEmitter.autoScale = true;
-                
+
 				coinEmitter.setScale(
                     scaleRatio,
                     scaleRatio,
@@ -278,7 +259,7 @@
                     scaleRatio
                 );
             }
-           
+
 			/**
              *  Adds coin group.
              */
@@ -287,7 +268,7 @@
                 coinGroup = game.add.group();
                 coinGroup.enableBody = true;
             }
-            
+
             /**
              *  Adds cursor key control.
              */
@@ -304,7 +285,7 @@
                     this
                 );
             }
-			
+
 			/**
              *  Adds the ground.
              */
@@ -312,7 +293,7 @@
             {
                 ground = game.add.group();
                 ground.enableBody = true;
-                
+
 				// Add ground to cover the entire horizontal field
                 var newGround;
                 for (var x = 0; x <= game.world.width; x += 384)
@@ -322,7 +303,7 @@
                     newGround.body.immovable = true;
                 }
             }
-			
+
 			/**
              *  Adds player.
              */
@@ -339,7 +320,7 @@
                 player.body.bounce.y = 0.25;
                 player.body.gravity.y = 600;
                 player.body.collideWorldBounds = true;
-                                
+
                 // Add animations
                 player.animations.add('idle', [0, 1], 3, true);
                 player.animations.add('jump-1', [2], 10, true);
@@ -350,7 +331,7 @@
                 // Initialize with idle animation
                 player.animations.play('idle');
             }
-            
+
             /**
              *  Adds tap particle emitter.
              */
@@ -361,23 +342,23 @@
 					tapEmitter.destroy();
 					tapEmitter = null;
 				}
-				
+
                 tapEmitter = game.add.emitter(0, 0, 12);
                 tapEmitter.makeParticles('tap', [0, 1, 2, 3]);
                 tapEmitter.setAlpha(0.3, 0.8);
                 tapEmitter.setRotation(0, 0);
                 tapEmitter.autoScale = true;
-                
+
 				tapEmitter.setScale(
                     scaleRatio,
                     scaleRatio,
                     scaleRatio,
                     scaleRatio
                 );
-                
+
                 game.input.onDown.add(tapBurst, this);
             }
-			
+
 			/**
 			 *  Adds title sprite.
 			 */
@@ -388,7 +369,7 @@
 				title.width = game.world.width;
 				title.scale.setTo(scaleRatio, scaleRatio);
 			}
-			
+
 			/**
 			 *  Begin "game" state.
 			 */
@@ -406,11 +387,10 @@
                 addPlayer(32, 100);
                 addCoin(100, 100);
 				addCloudGroup();
-				
+
 				// Add clouds at top
 				addCloud('cloud-0', 0);
-				addCloud('cloud-1', game.world.width * scaleRatio);
-				
+
 				// Create relevant popup windows
                 createPopup('popup-1', 'box-1', 'button-1');
                 createPopup('popup-2', 'box-2', 'button-2');
@@ -418,11 +398,11 @@
                 createPopup('popup-4', 'box-4', 'button-4');
                 createPopup('popup-5', 'box-5', 'button-5');
                 createPopup('popup-6', 'box-0', 'button-0', -128, 75, 0.45);
-				
+
 				// Add particle emitters
 				addCoinEmitter();
                 addTapEmitter();
-				
+
 				// Spawn popup window
 				popups['popup-1'].scale.setTo(0);
                 openPopup('popup-1');
@@ -431,7 +411,7 @@
 				shdText = game.add.bitmapText(10, 10, 'shadow', 'Combo:', 28 * scaleRatio);
 				bmpText = game.add.bitmapText(8, 8, 'font', 'Combo:', 28 * scaleRatio);
 			}
-			
+
 			/**
 			 *  Begin "title" state.
 			 */
@@ -440,14 +420,14 @@
 				addTitle();
 				addTapEmitter();
 			}
-            
+
 			/**
              *  Closes popup window.
              */
             function closePopup(tag)
             {
-                if (tweens[tag] && tweens[tag].isRunning 
-                    || popups[tag].scale.x === 0 
+                if (tweens[tag] && tweens[tag].isRunning
+                    || popups[tag].scale.x === 0
                     || popups[tag].scale.y === 0)
                 {
                     return;
@@ -474,14 +454,14 @@
                     );
                 }
             }
-			
+
 			/**
              *  Processes a single player-to-coin collision.
              */
             function collectCoin(player, coin)
             {
                 //console.log(coin.x + ',' + coin.y);
-				
+
 				// Explode effect on collect
                 coinEmitter.x = coin.x + 20 * scaleRatio;
                 coinEmitter.y = coin.y + 20 * scaleRatio;
@@ -492,24 +472,24 @@
                         element.scale.setTo(scaleRatio, scaleRatio);
                     }
                 );
-                
+
 				// Delete the coin object
                 coin.kill();
-				
+
 				// Increment score
 				combo += 1;
-                
+
 				// Randomly add a new coin somewhere
                 addCoin(Math.random() * game.world.width, 0);
             }
-			
+
 			/**
              *  Opens a popup window
              */
             function openPopup(tag)
             {
-                if (tweens[tag] && tweens[tag].isRunning 
-                    || popups[tag].scale.x !== 0 
+                if (tweens[tag] && tweens[tag].isRunning
+                    || popups[tag].scale.x !== 0
                     || popups[tag].scale.y !== 0)
                 {
                     return;
@@ -529,14 +509,14 @@
                     );
                     tweens[tag].onComplete.add(
                         function()
-                        { 
+                        {
                             opened[tag] = true;
                         },
                         this
                     );
                 }
             }
-            
+
             /**
              *  Starts physics system.
              */
@@ -544,7 +524,7 @@
             {
                 game.physics.startSystem(Phaser.Physics.ARCADE);
             }
-			
+
 			/**
              *  Callback for tap particle emitter.
              */
@@ -560,7 +540,15 @@
                     }
                 );
             }
-			
+
+			/**
+			 *  Updates cloud motion
+			 */
+			function updateCloudMovement()
+			{
+				clouds['cloud-0'].tilePosition.x += 2;
+			}
+
 			/**
              *  Processes all coin-to-ground collisions.
              */
@@ -572,7 +560,7 @@
 					combo = 0;
 				}
             }
-			
+
 			/**
              *  Processes all player-to-coin collisions.
              */
@@ -580,7 +568,7 @@
             {
                 game.physics.arcade.overlap(player, coinGroup, collectCoin, null, this);
             }
-			
+
 			/**
              *  Processes all player-to-ground collisions.
              */
@@ -588,7 +576,7 @@
             {
                 game.physics.arcade.collide(player, ground);
             }
-			
+
 			/**
              *  Updates player movement.
              */
@@ -597,17 +585,17 @@
 				if (seens['popup-5'])
 				{
 					player.body.velocity.x = 0;
-					
+
 					var targetX = playerTargetX - (player.body.width >> 1);
-					
+
 					if (targetX >= 0)
 					{
 						var px = player.body.position.x
 						var dx = px - targetX;
 						var elapsed = game.time.physicsElapsed;
-						
+
 						console.log(dx);
-						
+
 						if (dx > 1)
 						{
 							// Move left
@@ -615,7 +603,7 @@
 							player.body.velocity.x = dx;
 							player.animations.play('right');
 							player.scale.x = -playerScaleX;
-							
+
 							if (px + dx * elapsed < targetX)
 							{
 								player.body.position.x = targetX;
@@ -631,7 +619,7 @@
 							player.body.velocity.x = dx;
 							player.animations.play('right');
 							player.scale.x = playerScaleX;
-							
+
 							if (px + dx * elapsed > targetX)
 							{
 								player.body.position.x = targetX;
@@ -645,22 +633,22 @@
 							player.animations.play('idle');
 							playerTargetX = -1;
 						}
-					}    
+					}
 					else
 					{
 						player.animations.play('idle');
 						playerTargetX = -1;
-					}                
+					}
 				}
             }
-			
+
 			/**
              *  Updates popup windows.
              */
             function updatePopup()
             {
                 if (seens['popup-1'] && !opened['popup-2'])
-                {                                                                                                     
+                {
                     openPopup('popup-2');
                 }
                 else if (seens['popup-2'] && !opened['popup-3'])
@@ -680,7 +668,7 @@
                     openPopup('popup-6');
                 }
             }
-			
+
 			/**
 			 *  Updates popup windows for title state.
 			 */
@@ -688,7 +676,7 @@
 			{
 			    // Title game state
 				    if (tweens['popup-0'] === null)
-					{						
+					{
 						popups['popup-0'].scale.setTo(0);
 						openPopup('popup-0');
 					    addTapEmitter();
@@ -702,18 +690,18 @@
 						beginGame();
 					}
 			}
-			
+
             /**
              *  Preload callback.
              */
             function preload()
             {
                 game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-				
+
 				// Preload bitmap font
 				game.load.bitmapFont('font', 'assets/font.png', 'assets/font.fnt');
 				game.load.bitmapFont('shadow', 'assets/shadow.png', 'assets/shadow.fnt');
-                
+
                 // Preload button textures
                 game.load.spritesheet('button-0', 'assets/button-1.png', 290, 52);
                 game.load.spritesheet('button-1', 'assets/button-1.png', 290, 52);
@@ -721,7 +709,7 @@
                 game.load.spritesheet('button-3', 'assets/button-3.png', 290, 52);
                 game.load.spritesheet('button-4', 'assets/button-4.png', 290, 52);
                 game.load.spritesheet('button-5', 'assets/button-5.png', 290, 52);
-                                
+
                 // Preload message box textures
                 game.load.image('box-0', 'assets/box-0.png');
                 game.load.image('box-1', 'assets/box-1.png');
@@ -729,26 +717,26 @@
                 game.load.image('box-3', 'assets/box-3.png');
                 game.load.image('box-4', 'assets/box-4.png');
                 game.load.image('box-5', 'assets/box-5.png');
-                
+
                 // Preload background and title textures
 				game.load.image('cloud', 'assets/cloud.png');
                 game.load.image('title', 'assets/title.png');
                 game.load.image('background', 'assets/background.png');
-                
+
                 // Preload coin textures
                 game.load.spritesheet('coin', 'assets/coin.png', 48, 48);
-                
+
                 // Preload character textures
                 game.load.spritesheet('char', 'assets/char.png', 307, 447);
-                
+
                 // Preload ground textures
                 game.load.image('ground', 'assets/ground.png');
-                
+
                 // Preload emitter textures
                 game.load.spritesheet('coin-emit', 'assets/coin-emit.png', 40, 40);
                 game.load.spritesheet('tap', 'assets/tap.png', 40, 40);
             }
-            
+
             /**
              *  Create callback.
              */
@@ -759,14 +747,14 @@
 				createPopup('popup-0', 'box-0', 'button-0', -128, 75, 0.45);
 				createPopup('popup-b', 'box-0', 'button-0', -128, 75, 0.45);
             }
-            
+
             /**
              *  Render callback.
              */
             function render()
             {
             }
-			
+
             /**
              *  Update callback.
              */
@@ -784,13 +772,14 @@
 					updatePlayerGroundCollisions();
 					updatePlayerCoinCollisions();
 					updateCoinGroundCollisions();
-					
+					updateCloudMovement();
+
 					var text = 'Combo: ' + Math.round(combo);
 					bmpText.text = text;
 					shdText.text = text;
 				}
             }
-            
+
         </script>
         <div id="phaser-example"></div>
     </body>
