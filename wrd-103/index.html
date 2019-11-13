@@ -16,13 +16,13 @@
             var game = new Phaser.Game(
                 540 * window.devicePixelRatio,
                 853 * window.devicePixelRatio,
-                Phaser.CANVAS,
+                Phaser.AUTO,
                 'phaser-example',
                 {
                     preload: preload,
                     create: create,
                     render: render,
-                    update: update,
+                    update: update
                 }
             );
 
