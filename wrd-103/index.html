@@ -192,8 +192,7 @@
 			 */
 			function addCloud(tag, startX)
 			{
-				clouds[tag] = game.add.tileSprite(startX, 0, game.world.width, game.world.width / 540 * 277, 'cloud');
-				clouds[tag].tileScale.setTo(game.world.width / 540, game.world.width / 540);
+				clouds[tag] = game.add.tileSprite(startX, 0, 540 * scaleRatio, 277 * scaleRatio, 'cloud');
 				cloudGroup.add(clouds[tag]);
 			}
 
