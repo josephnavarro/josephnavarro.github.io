@@ -400,7 +400,7 @@ function updateEnemy(sprite)
 	try
 	{
 		var time = 200;
-		var dx = -1 * ENEMY_SPEED * getMultiplier();
+		var dx = -1 * ENEMY_SPEED * getMultiplier() * RATIO;
 		var check = -1 * sprite.width;
 
 		sprite.body.moveFrom(time, dx, 0);
