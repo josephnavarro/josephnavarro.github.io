@@ -183,8 +183,8 @@ function addTextScoreHigh()
 // Creates a cloud sprite
 function createCloud()
 {
-	var x = RATIO * game.world.width;
-	var y = RATIO * randint(MIN_CLOUD_Y, MAX_CLOUD_Y);
+	var x = game.world.width;
+	var y = randint(MIN_CLOUD_Y, MAX_CLOUD_Y);
 
 	clouds.forEach(
 		function(c)
@@ -356,7 +356,7 @@ function updateBackground()
 {
 	if (!isDead)
 	{
-		var dx = SCROLL_SPEED * getMultiplier() * RATIO;
+		var dx = SCROLL_SPEED * getMultiplier();
 		background.tilePosition.x -= dx;
 	}
 }
@@ -367,7 +367,7 @@ function updateCloud(sprite)
 {
 	try
 	{
-		var dx = CLOUD_SPEED * getMultiplier() * RATIO;
+		var dx = CLOUD_SPEED * getMultiplier();
 		var check = -1 * sprite.width;
 
     	sprite.x -= dx;
