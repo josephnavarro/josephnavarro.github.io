@@ -356,7 +356,7 @@ function updateBackground()
 {
 	if (!isDead)
 	{
-		var dx = SCROLL_SPEED * getMultiplier();
+		var dx = SCROLL_SPEED * getMultiplier() / RATIO;
 		background.tilePosition.x -= dx;
 	}
 }
