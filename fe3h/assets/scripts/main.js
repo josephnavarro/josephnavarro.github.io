@@ -551,9 +551,9 @@ function render()
 {
 	try
 	{
-		//game.debug.body(background);
-		//game.debug.body(byleth);
-		//game.debug.body(enemy);
+		game.debug.body(background);
+		game.debug.body(byleth);
+		game.debug.body(enemy);
 	}
 	catch (e)
 	{
