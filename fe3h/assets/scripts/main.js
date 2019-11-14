@@ -76,7 +76,7 @@ function addPlayerAnimations(sprite)
 
 	sprite.animations.add('idle', [0, 1, 2, 1], fps, true);
 	sprite.animations.add('jump', [6, 7, 8, 9, 10], fps, false);
-	sprite.animations.add('pose', [12, 13, 14, 15, 16, 17], fps, false);
+	sprite.animations.add('pose', [12], 0.01, false);
 	sprite.animations.add('run', [18, 19, 20, 21], fps, true);
 
 	return sprite;
@@ -324,6 +324,9 @@ function setLevel(key)
 // Starts game
 function startGame(levelKey="basic")
 {
+	// Set background color
+	setBackgroundColor('#f3f3f3');
+
 	// Set level key
 	setLevel(levelKey);
 
@@ -519,9 +522,6 @@ function preload()
 // Create callback
 function create()
 {
-	// Set background color
-	setBackgroundColor('#f3f3f3');
-
 	// Add cloud group
 	addCloudGroup();
 

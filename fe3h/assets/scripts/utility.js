@@ -164,6 +164,13 @@ function setBackgroundColor(color)
 }
 
 
+// Sets sprite tint
+function setTint(sprite, tint)
+{
+	sprite.tint = tint;
+}
+
+
 // Disables antialiasing on a sprite
 function unsmoothSprite(sprite)
 {
