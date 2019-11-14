@@ -36,10 +36,13 @@ function addPhysics(sprite, w=0, h=0, dx=0, dy=0, immovable=false)
 		h = sprite.height;
 	}
 
-	//w *= RATIO;
-	//h *= RATIO;
+	w *= RATIO;
+	h *= RATIO;
 	//dx *= RATIO;
 	//dy *= RATIO;
+	h = 1;
+	dx = 0;
+	dy = 0;
 
 	sprite.body.setSize(w, h, dx, dy);
 
