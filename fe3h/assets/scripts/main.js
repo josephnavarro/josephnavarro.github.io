@@ -113,8 +113,8 @@ function addScrollingBackground(x, y)
 {
 	var w = game.world.width;
 	var h = 16 * SPRITE_SCALE;
-	var dx = BACKGROUND_BODY_X;
-	var dy = BACKGROUND_BODY_Y;
+	var dx = RATIO * BACKGROUND_BODY_X;
+	var dy = RATIO * BACKGROUND_BODY_Y;
 	var key = _LEVEL_DATA[level]['background'];
 
 	background = addTiledSprite(x, y, w, h, key);
