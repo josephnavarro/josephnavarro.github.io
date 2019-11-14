@@ -16,14 +16,18 @@ var game = new Phaser.Game(
 // Globals
 var background;
 var byleth;
+var bylethGroup;
 var button;
 var clouds;
+var emitterGroup;
+var emitterTap;
 var enemies;
 var enemy;
 var textGameOver;
 var textScore;
 var textScoreHigh;
 
+var hasAddTap = false;
 var isContact = false;
 var isDead    = false;
 var level     = "basic";
@@ -55,8 +59,60 @@ function addButton()
 // Adds cloud group
 function addCloudGroup()
 {
+	if (clouds)
+	{
+		clouds.destroy();
+	}
 	clouds = game.add.group();
 	return clouds;
+}
+
+
+// Adds tap emitter sprite group
+function addEmitterGroup()
+{
+	if (emitterGroup)
+	{
+		emitterGroup.destroy();
+	}
+	emitterGroup = game.add.group();
+	return emitterGroup;
+}
+
+
+// Adds tap emitter
+function addEmitterTap()
+{
+	if (emitterTap)
+	{
+		emitterGroup.remove(emitterTap, false, false);
+		emitterTap.destroy();
+	}
+
+	var numParticles = 12;
+	emitterTap = game.add.emitter(0, 0, numParticles);
+
+	emitterTap.makeParticles('tap', [0, 1, 2]);
+	emitterTap.setAlpha(0.3, 0.8);
+
+	var sx1 = RATIO * SPRITE_SCALE;
+	var sx2 = RATIO * SPRITE_SCALE;
+	var sy1 = RATIO * SPRITE_SCALE;
+	var sy2 = RATIO * SPRITE_SCALE;
+	emitterTap.setScale(sx1, sx2, sy1, sy2);
+
+	emitterTap.minParticleSpeed.x *= RATIO;
+	emitterTap.minParticleSpeed.y *= RATIO
+	emitterTap.maxParticleSpeed.x *= RATIO;
+	emitterTap.maxParticleSpeed.y *= RATIO;
+
+	if (!hasAddTap)
+	{
+		hasAddTap = true;
+		game.input.onDown.add(handleTap, this);
+	}
+
+	emitterGroup.add(emitterTap);
 }
 
 
@@ -83,11 +139,24 @@ function addPlayerAnimations(sprite)
 }
 
 
+// Adds player sprite group
+function addPlayerGroup()
+{
+	if (bylethGroup)
+	{
+		bylethGroup.destroy();
+	}
+	bylethGroup = game.add.group();
+	return bylethGroup;
+}
+
+
 // Adds player sprite
 function addPlayerSprite(x, y)
 {
 	if (byleth)
 	{
+		bylethGroup.remove(byleth, false, false);
 		byleth.destroy();
 	}
 
@@ -103,6 +172,8 @@ function addPlayerSprite(x, y)
 
 	addPhysics(byleth, w, h, dx, dy);
 	addGravity(byleth);
+
+	bylethGroup.add(byleth);
 
 	return byleth;
 }
@@ -307,6 +378,25 @@ function handlePlayerGround(player, ground)
 }
 
 
+// Handles a tap burst
+function handleTap(pointer)
+{
+	emitterTap.x = pointer.x;
+	emitterTap.y = pointer.y;
+	emitterTap.explode(500, 6);
+
+	var sx = RATIO * SPRITE_SCALE;
+	var sy = RATIO * SPRITE_SCALE;
+	emitterTap.children.forEach(
+        function (element)
+        {
+			unsmoothSprite(element);
+            element.scale.setTo(sx, sy);
+        }
+    );
+}
+
+
 // Sets "dead" flag
 function setDead(dead)
 {
@@ -351,6 +441,8 @@ function startGame(levelKey="basic")
 
 	// Add score text
 	addTextScore();
+
+
 }
 
 
@@ -497,6 +589,7 @@ function preload()
 	// Load spritesheets
 	game.load.spritesheet('byleth', 'assets/sheet.png', 32, 32);
 	game.load.spritesheet('button', 'assets/restart.png', 36, 32);
+	game.load.spritesheet('tap', 'assets/sparkle.png', 9, 9);
 
 	// Load images
 	game.load.image('cloud', 'assets/cloud.png');
@@ -531,6 +624,9 @@ function create()
 	// Add enemy group
 	addEnemyGroup();
 
+	// Add player group
+	addPlayerGroup();
+
 	// Starts game
 	var levelKey = 'basic';
 	startGame(levelKey);
@@ -543,6 +639,11 @@ function create()
 		},
 		this
 	);
+
+	// Add tap emitter
+	addEmitterGroup();
+
+	addEmitterTap();
 }
 
 
