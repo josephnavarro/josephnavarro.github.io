@@ -356,7 +356,7 @@ function updateBackground()
 {
 	if (!isDead)
 	{
-		var dx = SCROLL_SPEED * getMultiplier();
+		var dx = SCROLL_SPEED * getMultiplier() * RATIO;
 		background.tilePosition.x -= dx;
 	}
 }
@@ -367,7 +367,7 @@ function updateCloud(sprite)
 {
 	try
 	{
-		var dx = CLOUD_SPEED * getMultiplier();
+		var dx = CLOUD_SPEED * getMultiplier() * RATIO;
 		var check = -1 * sprite.width;
 
     	sprite.x -= dx;
