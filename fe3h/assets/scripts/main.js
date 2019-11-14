@@ -356,7 +356,7 @@ function updateBackground()
 {
 	if (!isDead)
 	{
-		var dx = RATIO * SCROLL_SPEED * getMultiplier();
+		var dx = SCROLL_SPEED * getMultiplier();
 		background.tilePosition.x -= dx;
 	}
 }
@@ -367,8 +367,8 @@ function updateCloud(sprite)
 {
 	try
 	{
-		var dx = RATIO * CLOUD_SPEED * getMultiplier();
-		var check = RATIO * -1 * sprite.width;
+		var dx = CLOUD_SPEED * getMultiplier();
+		var check = -1 * sprite.width;
 
     	sprite.x -= dx;
 		if (sprite.x <= check)
@@ -400,8 +400,8 @@ function updateEnemy(sprite)
 	try
 	{
 		var time = 200;
-		var dx = RATIO * -1 * ENEMY_SPEED * getMultiplier();
-		var check = RATIO * -1 * sprite.width;
+		var dx = -1 * ENEMY_SPEED * getMultiplier();
+		var check = -1 * sprite.width;
 
 		sprite.body.moveFrom(time, dx, 0);
     	if (sprite.x <= check)
