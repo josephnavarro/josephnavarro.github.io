@@ -183,7 +183,7 @@ function addPlayerSprite(x, y)
 function addScrollingBackground(x, y)
 {
 	var w = game.world.width;
-	var h = 16 * SPRITE_SCALE;
+	var h = RATIO * BACKGROUND_BODY_H * SPRITE_SCALE;
 	var dx = RATIO * BACKGROUND_BODY_X;
 	var dy = RATIO * BACKGROUND_BODY_Y;
 	var key = _LEVEL_DATA[level]['background'];
@@ -276,18 +276,21 @@ function createCloud()
 // Creates an enemy
 function createEnemy(tag)
 {
-	//console.log(_ENEMY_DATA);
-	//console.log(tag);
-	var data = _ENEMY_DATA[tag];
 	var x = RATIO * game.world.width;
 	var y = RATIO * (BACKGROUND_Y + BACKGROUND_BODY_Y);
-	var dx = data["body"][0];
-	var dy = data["body"][1];
-	var w = data["body"][2];
-	var h = data["body"][3];
+	var dx = _ENEMY_DATA[tag]["body"][0];
+	var dy = _ENEMY_DATA[tag]["body"][1];
+	var w = _ENEMY_DATA[tag]["body"][2];
+	var h = _ENEMY_DATA[tag]["body"][3];
 
 	// Clean up all enemies
-	enemies.forEach(function(_){_.destroy()}, this);
+	enemies.forEach(
+		function(_)
+		{
+			_.destroy();
+		},
+		this
+	);
 
 	// Create new enemy
 	enemy = enemies.create(x, y, tag);
@@ -652,9 +655,9 @@ function render()
 {
 	try
 	{
-		//game.debug.body(background);
-		//game.debug.body(byleth);
-		//game.debug.body(enemy);
+		game.debug.body(background);
+		game.debug.body(byleth);
+		game.debug.body(enemy);
 	}
 	catch (e)
 	{

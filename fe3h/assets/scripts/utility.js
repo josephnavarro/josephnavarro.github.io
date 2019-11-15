@@ -140,6 +140,7 @@ function scaleSprite(sprite)
 {
 	var sx = RATIO * SPRITE_SCALE;
 	var sy = RATIO * SPRITE_SCALE;
+
 	sprite.scale.setTo(sx, sy);
 
 	return sprite;
@@ -151,6 +152,7 @@ function scaleTileSprite(sprite)
 {
 	var sx = RATIO * SPRITE_SCALE;
 	var sy = RATIO * SPRITE_SCALE;
+
 	sprite.tileScale.setTo(sx, sy);
 
 	return sprite;

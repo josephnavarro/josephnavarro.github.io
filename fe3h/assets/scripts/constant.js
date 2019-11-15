@@ -13,6 +13,7 @@ const BACKGROUND_X      = 0;
 const BACKGROUND_Y      = 272;
 const BACKGROUND_BODY_X = 0;
 const BACKGROUND_BODY_Y = 56;
+const BACKGROUND_BODY_H = 16;
 const BUTTON_X          = 198;
 const BUTTON_Y          = 400;
 const PLAYER_X          = 64;
