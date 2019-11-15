@@ -183,7 +183,7 @@ function addPlayerSprite(x, y)
 function addScrollingBackground(x, y)
 {
 	var w = game.world.width;
-	var h = RATIO * BACKGROUND_BODY_H * SPRITE_SCALE;
+	var h = BACKGROUND_BODY_H * SPRITE_SCALE;
 	var dx = RATIO * BACKGROUND_BODY_X;
 	var dy = RATIO * BACKGROUND_BODY_Y;
 	var key = _LEVEL_DATA[level]['background'];
