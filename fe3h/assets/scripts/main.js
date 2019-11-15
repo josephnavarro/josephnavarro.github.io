@@ -347,6 +347,7 @@ function handlePlayerEnemy(player, enemy)
 	if (player.body.touching.right || player.body.touching.down)
 	{
 		// Stop enemy
+		enemy.body.stopMovement();
 		enemy.body.velocity.x = 0;
 		enemy.body.velocity.y = 0;
 
