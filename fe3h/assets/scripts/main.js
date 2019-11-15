@@ -510,12 +510,15 @@ function updateEnemy(sprite)
 {
 	try
 	{
-		var time = 200;
-		var dx = -1 * ENEMY_SPEED * getMultiplier() * RATIO;
-		var check = -1 * sprite.width;
+		if (!isDead)
+		{
+			var time = 200;
+			var dx = -1 * ENEMY_SPEED * getMultiplier() * RATIO;
+			var check = -1 * sprite.width;
+			sprite.body.moveFrom(time, dx, 0);
+		}
 
-		sprite.body.moveFrom(time, dx, 0);
-    	if (sprite.x <= check)
+		if (sprite.x <= check)
 		{
 			enemies.remove(sprite, true);
 		}
