@@ -125,6 +125,19 @@ function addEnemyGroup()
 }
 
 
+// Adds user input handlers
+function addInput()
+{
+	game.input.onDown.add(
+		function(pointer)
+		{
+			handleJump(byleth);
+		},
+		this
+	);
+}
+
+
 // Adds player animations
 function addPlayerAnimations(sprite)
 {
@@ -199,10 +212,7 @@ function addScrollingBackground(x, y)
 // Adds game over text
 function addTextGameOver()
 {
-	if (textGameOver)
-	{
-		textGameOver.destroy();
-	}
+	if (textGameOver) { textGameOver.destroy(); }
 
 	var font = 'dark';
 	var text = 'GAME OVER';
@@ -217,10 +227,7 @@ function addTextGameOver()
 // Adds score text
 function addTextScore()
 {
-	if (textScore)
-	{
-		textScore.destroy();
-	}
+	if (textScore) { textScore.destroy(); }
 
 	score = 0;
 
@@ -237,10 +244,7 @@ function addTextScore()
 // Adds high score text
 function addTextScoreHigh()
 {
-	if (textScoreHigh)
-	{
-		textScoreHigh.destroy();
-	}
+	if (textScoreHigh) { textScoreHigh.destroy(); }
 
 	var font = 'light';
 	var text = 'HI ' + padLeft(Math.round(scoreHigh), 5);
@@ -258,15 +262,12 @@ function createCloud()
 	var x = game.world.width;
 	var y = randint(MIN_CLOUD_Y, MAX_CLOUD_Y);
 
-	clouds.forEach(
-		function(_)
-		{
-			_.destroy();
-		},
-		this
-	);
+	// Clean up all clouds
+	clouds.forEach(function(_) { _.destroy(); }, this);
 
+	// Create new cloud
 	var cloud = clouds.create(x, y, 'cloud');
+
 	unsmoothSprite(cloud);
 	scaleSprite(cloud);
 
@@ -285,13 +286,7 @@ function createEnemy(tag)
 	var dy = _ENEMY_DATA[tag]["body"][1];
 
 	// Clean up all enemies
-	enemies.forEach(
-		function(_)
-		{
-			_.destroy();
-		},
-		this
-	);
+	enemies.forEach(function(_) { _.destroy(); }, this);
 
 	// Create new enemy
 	enemy = enemies.create(x, y, tag);
@@ -306,13 +301,17 @@ function createEnemy(tag)
 }
 
 
+// Destroys all current enemies
+function destroyEnemies()
+{
+	enemies.forEach(function(_) { _.destroy(); }, this);
+}
+
+
 // Destroys "game over" text
 function destroyTextGameOver()
 {
-	if (textGameOver)
-	{
-		textGameOver.destroy();
-	}
+	if (textGameOver) { textGameOver.destroy(); }
 }
 
 
@@ -326,10 +325,7 @@ function getMultiplier()
 // Handles button click events
 function handleButton()
 {
-	if (button)
-	{
-		button.destroy();
-	}
+	if (button) { button.destroy(); }
 	startGame();
 }
 
@@ -356,8 +352,8 @@ function handlePlayerEnemy(player, enemy)
 
 		// Stop player
 		player.body.velocity.x = 0;
-		player.body.gravity.y = 0;
 		player.body.velocity.y = 0;
+		player.body.gravity.y = 0;
 
 		// Player is now dead
 		playAnimation(player, 'pose', false, 0);
@@ -390,6 +386,7 @@ function handleTap(pointer)
 	var sx = RATIO * SPRITE_SCALE;
 	var sy = RATIO * SPRITE_SCALE;
 
+	// Scale up and de-antialias particles
 	emitterTap.children.forEach(
         function(_)
         {
@@ -397,6 +394,14 @@ function handleTap(pointer)
             _.scale.setTo(sx, sy);
         }
     );
+}
+
+
+// Dynamically loads assets during runtime
+function loadAssets()
+{
+	loadDelay = 0;
+	game.load.start();
 }
 
 
@@ -417,34 +422,36 @@ function setLevel(key)
 // Starts game
 function startGame(levelKey="basic")
 {
-	// Load all images defined under enemy data
+	// Load all images defined under this level's enemy data
 	var enemyData = _LEVEL_DATA[levelKey]["enemy"];
 	for (const entry of enemyData)
 	{
 		var key = entry;
 		var image = _ENEMY_DATA[key]["image"];
-		console.log(key, image);
 		game.load.image(key, image);
 	}
-	game.load.start();
+	loadAssets();
 
 	// Set background color
 	setBackgroundColor('#f3f3f3');
 
-	// Set level key
+	// Set current level key
 	setLevel(levelKey);
 
 	// Reset "dead" flag
 	setDead(false);
 
-	// Clear "game over" text
+	// Clear "game over" text (if any)
 	destroyTextGameOver();
 
-	// Add Byleth
+	// Add Byleth, the player!
 	playAnimation(addPlayerSprite(PLAYER_X, PLAYER_Y), 'jump', false, 1);
 
-	// Add lone cloud
+	// Add a lone cloud
 	createCloud();
+
+	// Clear all old enemy objects (if any)
+	destroyEnemies();
 
 	// Add high score text
 	addTextScoreHigh();
@@ -525,7 +532,6 @@ function updateEnemies()
 	// Update all enemies
 	enemies.forEach(updateEnemy, this, true);
 
-	// Randomly spawn a new enemy if none are onscreen
 	var loaded = loadDelay >= LOAD_DELAY;
 	var isEmpty = enemies.children.length === 0;
 	var randMin = _LEVEL_DATA[level]["rate"][0];
@@ -533,6 +539,7 @@ function updateEnemies()
 	var randRate = _LEVEL_DATA[level]["rate"][2];
 	var randomly = randint(randMin, randMax) < randRate;
 
+	// Randomly spawn a new enemy if none are onscreen and assets are loaded
 	if (loaded && isEmpty && randomly)
 	{
 		var enemyKey = randomChoice(_LEVEL_DATA[level]["enemy"]);
@@ -655,13 +662,7 @@ function create()
 	startGame(levelKey);
 
 	// Process jump on input down
-	game.input.onDown.add(
-		function(pointer)
-		{
-			handleJump(byleth);
-		},
-		this
-	);
+	addInput();
 
 	// Add tap emitter
 	addEmitterGroup();

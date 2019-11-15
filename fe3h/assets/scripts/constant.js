@@ -5,7 +5,7 @@ const HEIGHT = 853;
 const TARGET = 'phaser-example';
 
 // Asset loading constants
-const LOAD_DELAY = 10;
+const LOAD_DELAY = 127;
 
 // Score constants
 const DELTA_SCORE      = 0.2;
@@ -19,8 +19,8 @@ const SPRITE_FRAMERATE = 8;
 const SCROLL_SPEED = 1;
 const CLOUD_SPEED  = 2;
 const ENEMY_SPEED  = 240;
-const JUMP_SPEED   = 500;
-const GRAVITY      = 1000;
+const JUMP_SPEED   = 800;
+const GRAVITY      = 2000;
 
 // Background constants
 const BACKGROUND_X      = 0;
