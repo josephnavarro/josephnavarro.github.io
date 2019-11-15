@@ -31,6 +31,7 @@ var hasAddTap = false;
 var isContact = false;
 var isDead    = false;
 var level     = "basic";
+var loadDelay = 0;
 var score     = 0;
 var scoreHigh = 0;
 
@@ -258,9 +259,9 @@ function createCloud()
 	var y = randint(MIN_CLOUD_Y, MAX_CLOUD_Y);
 
 	clouds.forEach(
-		function(c)
+		function(_)
 		{
-			c.destroy()
+			_.destroy();
 		},
 		this
 	);
@@ -278,10 +279,10 @@ function createEnemy(tag)
 {
 	var x = RATIO * game.world.width;
 	var y = RATIO * (BACKGROUND_Y + BACKGROUND_BODY_Y);
-	var dx = _ENEMY_DATA[tag]["body"][0];
-	var dy = _ENEMY_DATA[tag]["body"][1];
 	var w = _ENEMY_DATA[tag]["body"][2];
 	var h = _ENEMY_DATA[tag]["body"][3];
+	var dx = _ENEMY_DATA[tag]["body"][0];
+	var dy = _ENEMY_DATA[tag]["body"][1];
 
 	// Clean up all enemies
 	enemies.forEach(
@@ -318,7 +319,7 @@ function destroyTextGameOver()
 // Returns current speed multiplier
 function getMultiplier()
 {
-	return 1 + score / 500;
+	return 1 + score / SCORE_MULTIPLIER;
 }
 
 
@@ -357,15 +358,13 @@ function handlePlayerEnemy(player, enemy)
 		player.body.velocity.x = 0;
 		player.body.gravity.y = 0;
 		player.body.velocity.y = 0;
-		playAnimation(player, 'pose', false, 0);
 
 		// Player is now dead
+		playAnimation(player, 'pose', false, 0);
 		setDead(true);
 
-		// Spawn reset button
+		// Spawn reset button and game over text
 		addButton();
-
-		// Spawn game over text
 		addTextGameOver();
 	}
 }
@@ -390,11 +389,12 @@ function handleTap(pointer)
 
 	var sx = RATIO * SPRITE_SCALE;
 	var sy = RATIO * SPRITE_SCALE;
+
 	emitterTap.children.forEach(
-        function (element)
+        function(_)
         {
-			unsmoothSprite(element);
-            element.scale.setTo(sx, sy);
+			unsmoothSprite(_);
+            _.scale.setTo(sx, sy);
         }
     );
 }
@@ -417,6 +417,17 @@ function setLevel(key)
 // Starts game
 function startGame(levelKey="basic")
 {
+	// Load all images defined under enemy data
+	var enemyData = _LEVEL_DATA[levelKey]["enemy"];
+	for (const entry of enemyData)
+	{
+		var key = entry;
+		var image = _ENEMY_DATA[key]["image"];
+		console.log(key, image);
+		game.load.image(key, image);
+	}
+	game.load.start();
+
 	// Set background color
 	setBackgroundColor('#f3f3f3');
 
@@ -435,17 +446,11 @@ function startGame(levelKey="basic")
 	// Add lone cloud
 	createCloud();
 
-	// Add enemy
-	var enemyKey = randomChoice(_LEVEL_DATA[level]["enemy"]);
-	createEnemy(enemyKey);
-
 	// Add high score text
 	addTextScoreHigh();
 
 	// Add score text
 	addTextScore();
-
-
 }
 
 
@@ -521,13 +526,14 @@ function updateEnemies()
 	enemies.forEach(updateEnemy, this, true);
 
 	// Randomly spawn a new enemy if none are onscreen
+	var loaded = loadDelay >= LOAD_DELAY;
 	var isEmpty = enemies.children.length === 0;
 	var randMin = _LEVEL_DATA[level]["rate"][0];
 	var randMax = _LEVEL_DATA[level]["rate"][1];
 	var randRate = _LEVEL_DATA[level]["rate"][2];
 	var randomly = randint(randMin, randMax) < randRate;
 
-	if (isEmpty && randomly)
+	if (loaded && isEmpty && randomly)
 	{
 		var enemyKey = randomChoice(_LEVEL_DATA[level]["enemy"]);
 		createEnemy(enemyKey);
@@ -535,17 +541,39 @@ function updateEnemies()
 }
 
 
+// Updates load delay timer
+function updateLoadDelay()
+{
+	if (loadDelay < LOAD_DELAY)
+	{
+		loadDelay += 1;
+	}
+}
+
+
 // Updates player-to-ground collisions
 function updatePlayerEnemy()
 {
-	game.physics.arcade.collide(byleth, enemies, handlePlayerEnemy, null, this);
+	game.physics.arcade.collide(
+		byleth,
+		enemies,
+		handlePlayerEnemy,
+		null,
+		this
+	);
 }
 
 
 // Updates player-to-ground collisions
 function updatePlayerGround()
 {
-	game.physics.arcade.collide(byleth, background, handlePlayerGround, null, this);
+	game.physics.arcade.collide(
+		byleth,
+		background,
+		handlePlayerGround,
+		null,
+		this
+	);
 }
 
 
@@ -604,14 +632,6 @@ function preload()
 		var image = entry[1];
 		game.load.image(key, image);
 	}
-
-	// Load all images defined under enemy data
-	for (const entry of Object.entries(_ENEMY_DATA))
-	{
-		var key = entry[0];
-		var image = entry[1]['image'];
-		game.load.image(key, image);
-	}
 }
 
 
@@ -645,7 +665,6 @@ function create()
 
 	// Add tap emitter
 	addEmitterGroup();
-
 	addEmitterTap();
 }
 
@@ -661,11 +680,7 @@ function render()
 	}
 	catch (e)
 	{
-		//...
-	}
-	finally
-	{
-		//...
+		// Nothing
 	}
 }
 
@@ -673,6 +688,7 @@ function render()
 // Update callback
 function update()
 {
+	updateLoadDelay();
     updateBackground();
 	updateClouds();
 	updateEnemies();

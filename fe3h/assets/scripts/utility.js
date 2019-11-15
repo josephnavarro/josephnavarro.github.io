@@ -26,27 +26,12 @@ function addPhysics(sprite, w=0, h=0, dx=0, dy=0, immovable=false)
 {
 	game.physics.enable(sprite, Phaser.Physics.ARCADE);
 
-	if (!w)
-	{
-		w = sprite.width;
-	}
-
-	if (!h)
-	{
-		h = sprite.height;
-	}
-
-	//w *= RATIO;
-	//h *= RATIO;
-	//dx *= RATIO;
-	//dy *= RATIO;
+	if (!w) { w = sprite.width; }
+	if (!h) { h = sprite.height; }
 
 	sprite.body.setSize(w, h, dx, dy);
 
-	if (immovable)
-	{
-		sprite.body.immovable = true;
-	}
+	if (immovable) { sprite.body.immovable = true; }
 
 	return sprite;
 }
@@ -82,18 +67,15 @@ function addTiledSprite(x, y, w, h, tag)
 function padLeft(number, padding)
 {
 	padding -= number.toString().length;
-	if (padding < 0)
-	{
-		padding = 0;
-	}
+	if (padding < 0) { padding = 0; }
+
 	var string = '';
-
-
-	for (var x=0; x < padding; x++)
+	for (var x = 0; x < padding; x++)
 	{
 		string += '0';
 	}
 	string += number;
+
 	return string;
 }
 
