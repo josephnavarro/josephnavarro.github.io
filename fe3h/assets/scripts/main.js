@@ -31,7 +31,7 @@ var hasAddTap = false;
 var isContact = false;
 var isDead    = false;
 var level     = "basic";
-var loadDelay = 0;
+var loadComplete = false;
 var score     = 0;
 var scoreHigh = 0;
 
@@ -401,8 +401,8 @@ function handleTap(pointer)
 // Dynamically loads assets during runtime
 function loadAssets()
 {
-	loadDelay = 0;
 	game.load.start();
+	game.load.onLoadComplete.add(function() { loadComplete = true; }, this);
 }
 
 
@@ -536,7 +536,6 @@ function updateEnemies()
 	// Update all enemies
 	enemies.forEach(updateEnemy, this, true);
 
-	var loaded = loadDelay >= LOAD_DELAY;
 	var isEmpty = enemies.children.length === 0;
 	var randMin = _LEVEL_DATA[level]["rate"][0];
 	var randMax = _LEVEL_DATA[level]["rate"][1];
@@ -544,20 +543,10 @@ function updateEnemies()
 	var randomly = randint(randMin, randMax) < randRate;
 
 	// Randomly spawn a new enemy if none are onscreen and assets are loaded
-	if (loaded && isEmpty && randomly)
+	if (loadComplete && isEmpty && randomly)
 	{
 		var enemyKey = randomChoice(_LEVEL_DATA[level]["enemy"]);
 		createEnemy(enemyKey);
-	}
-}
-
-
-// Updates load delay timer
-function updateLoadDelay()
-{
-	if (loadDelay < LOAD_DELAY)
-	{
-		loadDelay += 1;
 	}
 }
 
@@ -693,7 +682,6 @@ function render()
 // Update callback
 function update()
 {
-	updateLoadDelay();
     updateBackground();
 	updateClouds();
 	updateEnemies();

@@ -4,9 +4,6 @@ const WIDTH  = 540;
 const HEIGHT = 853;
 const TARGET = 'phaser-example';
 
-// Asset loading constants
-const LOAD_DELAY = 127;
-
 // Score constants
 const DELTA_SCORE      = 0.2;
 const SCORE_MULTIPLIER = 500;
