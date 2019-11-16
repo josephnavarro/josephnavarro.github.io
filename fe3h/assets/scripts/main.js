@@ -67,6 +67,24 @@ function addBackgroundGroup()
 }
 
 
+// Creates a cloud sprite
+function addCloud()
+{
+	// Clean up all clouds
+	destroyClouds();
+
+	// Create new cloud
+	var x     = game.world.width;
+	var y     = randint(MIN_CLOUD_Y, MAX_CLOUD_Y);
+	var cloud = groupClouds.create(x, y, 'cloud');
+
+	unsmoothSprite(cloud);
+	scaleSprite(cloud);
+
+	return cloud;
+}
+
+
 // Adds cloud group
 function addCloudGroup()
 {
@@ -118,6 +136,32 @@ function addEmitterTap()
 	}
 
 	groupEmitter.add(emitterTap);
+}
+
+
+// Creates a new enemy
+function addEnemy(tag)
+{
+	// Clean up all enemies
+	destroyEnemies();
+
+	// Create new enemy
+	var x  = RATIO * game.world.width;
+	var y  = RATIO * (BACKGROUND_Y + BACKGROUND_BODY_Y);
+	var w  = _ENEMY_DATA[tag]["body"][2];
+	var h  = _ENEMY_DATA[tag]["body"][3];
+	var dx = _ENEMY_DATA[tag]["body"][0];
+	var dy = _ENEMY_DATA[tag]["body"][1];
+
+	enemy = groupEnemy.create(x, y, tag);
+
+	unsmoothSprite(enemy)
+	scaleSprite(enemy)
+	addPhysics(enemy, w, h, dx, dy, true);
+
+	enemy.anchor.setTo(0, 1);
+
+	return enemy;
 }
 
 
@@ -263,50 +307,6 @@ function addTextScoreHigh()
 	var size = FONT_SIZE;
 
 	textScoreHigh = addBitmapText(font, text, x, y, size);
-}
-
-
-// Creates a cloud sprite
-function addCloud()
-{
-	// Clean up all clouds
-	destroyClouds();
-
-	// Create new cloud
-	var x     = game.world.width;
-	var y     = randint(MIN_CLOUD_Y, MAX_CLOUD_Y);
-	var cloud = groupClouds.create(x, y, 'cloud');
-
-	unsmoothSprite(cloud);
-	scaleSprite(cloud);
-
-	return cloud;
-}
-
-
-// Creates a new enemy
-function addEnemy(tag)
-{
-	// Clean up all enemies
-	destroyEnemies();
-
-	// Create new enemy
-	var x  = RATIO * game.world.width;
-	var y  = RATIO * (BACKGROUND_Y + BACKGROUND_BODY_Y);
-	var w  = _ENEMY_DATA[tag]["body"][2];
-	var h  = _ENEMY_DATA[tag]["body"][3];
-	var dx = _ENEMY_DATA[tag]["body"][0];
-	var dy = _ENEMY_DATA[tag]["body"][1];
-
-	enemy = groupEnemy.create(x, y, tag);
-
-	unsmoothSprite(enemy)
-	scaleSprite(enemy)
-	addPhysics(enemy, w, h, dx, dy, true);
-
-	enemy.anchor.setTo(0, 1);
-
-	return enemy;
 }
 
 
