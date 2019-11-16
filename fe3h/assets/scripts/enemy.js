@@ -4,11 +4,11 @@ const _ENEMY_DATA = {
 		"image": "assets/enemy/alois.png"
 	},
 	"altered-demonic-beast": {
-		"body": [2, 12, 24, 13],
+		"body": [8, 8, 16, 17],
 		"image": "assets/enemy/altered_demonic_beast.png"
 	},
 	"altered-golem": {
-		"body": [0, 0, 32, 32],
+		"body": [4, 8, 16, 21],
 		"image": "assets/enemy/altered_golem.png"
 	},
 	"annette-1": {
@@ -36,7 +36,7 @@ const _ENEMY_DATA = {
 		"image": "assets/enemy/bernadetta_2.png"
 	},
 	"black-beast": {
-		"body": [0, 0, 32, 32],
+		"body": [8, 8, 16, 17],
 		"image": "assets/enemy/black_beast.png"
 	},
 	"byleth-f-1": {
@@ -84,7 +84,7 @@ const _ENEMY_DATA = {
 		"image": "assets/enemy/cyril_2.png"
 	},
 	"death-knight": {
-		"body": [0, 0, 32, 32],
+		"body": [4, 8, 16, 20],
 		"image": "assets/enemy/death_knight.png"
 	},
 	"dedue-1": {
@@ -96,7 +96,7 @@ const _ENEMY_DATA = {
 		"image": "assets/enemy/dedue_2.png"
 	},
 	"demonic-beast": {
-		"body": [0, 0, 32, 32],
+		"body": [8, 8, 16, 17],
 		"image": "assets/enemy/demonic_beast.png"
 	},
 	"dimitri-1": {
@@ -124,7 +124,7 @@ const _ENEMY_DATA = {
 		"image": "assets/enemy/edelgard_2.png"
 	},
 	"experimental-demonic-beast": {
-		"body": [0, 0, 32, 32],
+		"body": [8, 8, 16, 17],
 		"image": "assets/enemy/experimental_demonic_beast.png"
 	},
 	"felix-1": {
@@ -144,7 +144,7 @@ const _ENEMY_DATA = {
 		"image": "assets/enemy/ferdinand_2.png"
 	},
 	"flame-emperor": {
-		"body": [0, 0, 32, 32],
+		"body": [2, 8, 16, 16],
 		"image": "assets/enemy/flame_emperor.png"
 	},
 	"flayn": {
@@ -152,11 +152,11 @@ const _ENEMY_DATA = {
 		"image": "assets/enemy/flayn.png"
 	},
 	"flying-demonic-beast": {
-		"body": [0, 0, 32, 32],
+		"body": [8, 8, 16, 19],
 		"image": "assets/enemy/flying_demonic_beast.png"
 	},
 	"giant-bird": {
-		"body": [4, 2, 12, 26],
+		"body": [4, 9, 12, 19],
 		"image": "assets/enemy/giant_bird.png"
 	},
 	"giant-crawler": {
@@ -164,11 +164,11 @@ const _ENEMY_DATA = {
 		"image": "assets/enemy/giant_crawler.png"
 	},
 	"giant-demonic-beast": {
-		"body": [0, 0, 32, 32],
+		"body": [7, 8, 18, 21],
 		"image": "assets/enemy/giant_demonic_beast.png"
 	},
 	"giant-wolf": {
-		"body": [0, 0, 32, 32],
+		"body": [8, 8, 16, 15],
 		"image": "assets/enemy/giant_wolf.png"
 	},
 	"gilbert": {
