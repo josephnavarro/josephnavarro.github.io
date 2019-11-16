@@ -4,7 +4,7 @@ const _ENEMY_DATA = {
 		"image": "assets/enemy/alois.png"
 	},
 	"altered-demonic-beast": {
-		"body": [2, 12, 24, 12],
+		"body": [2, 12, 24, 13],
 		"image": "assets/enemy/altered_demonic_beast.png"
 	},
 	"altered-golem": {
@@ -156,11 +156,11 @@ const _ENEMY_DATA = {
 		"image": "assets/enemy/flying_demonic_beast.png"
 	},
 	"giant-bird": {
-		"body": [0, 0, 32, 32],
+		"body": [4, 2, 12, 26],
 		"image": "assets/enemy/giant_bird.png"
 	},
 	"giant-crawler": {
-		"body": [4, 8, 16, 16],
+		"body": [4, 8, 16, 13],
 		"image": "assets/enemy/giant_crawler.png"
 	},
 	"giant-demonic-beast": {

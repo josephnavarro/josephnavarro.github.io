@@ -406,6 +406,7 @@ function loadAssets(key)
 	// Pause game to load resources
 	game.paused = true;
 
+	// Load enemies defined for this level
 	var enemyData = _LEVEL_DATA[key]["enemy"];
 	for (const entry of enemyData)
 	{

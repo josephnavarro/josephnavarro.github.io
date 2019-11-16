@@ -2,8 +2,9 @@ const _LEVEL_DATA = {
 	"basic": {
 		"background": "ground",
 		"enemy": [
-			"altered-demonic-beast",
-			"giant-crawler"
+			//"altered-demonic-beast",
+			"giant-bird",
+			//"giant-crawler"
 		],
 		"rate": [0, 100, 1]
 	}

@@ -16,8 +16,8 @@ const SPRITE_FRAMERATE = 8;
 const SCROLL_SPEED = 1;
 const CLOUD_SPEED  = 2;
 const ENEMY_SPEED  = 240;
-const JUMP_SPEED   = 800;
-const GRAVITY      = 2000;
+const JUMP_SPEED   = 1000;
+const GRAVITY      = 2500;
 
 // Background constants
 const BACKGROUND_X      = 0;
