@@ -31,7 +31,7 @@ var hasAddTap = false;
 var isContact = false;
 var isDead    = false;
 var level     = "basic";
-var loadComplete = false;
+var hasLoaded = false;
 var score     = 0;
 var scoreHigh = 0;
 
@@ -293,7 +293,7 @@ function createEnemy(tag)
 
 	unsmoothSprite(enemy)
 	scaleSprite(enemy)
-	addPhysics(enemy, w, h, dx, dy, false);
+	addPhysics(enemy, w, h, dx, dy, true);
 
 	enemy.anchor.setTo(0, 1);
 
@@ -399,10 +399,31 @@ function handleTap(pointer)
 
 
 // Dynamically loads assets during runtime
-function loadAssets()
+function loadAssets(key)
 {
+	game.load.onLoadComplete.add(loadComplete, this);
+
+	// Pause game to load resources
+	game.paused = true;
+
+	var enemyData = _LEVEL_DATA[key]["enemy"];
+	for (const entry of enemyData)
+	{
+		var key = entry;
+		var image = _ENEMY_DATA[key]["image"];
+		game.load.image(key, image);
+	}
+
+	// Resume game and process loads
+	game.paused = false;
+
 	game.load.start();
-	game.load.onLoadComplete.add(function() { loadComplete = true; }, this);
+}
+
+// Load completion callback
+function loadComplete()
+{
+	hasLoaded = true;
 }
 
 
@@ -424,14 +445,7 @@ function setLevel(key)
 function startGame(levelKey="basic")
 {
 	// Load all images defined under this level's enemy data
-	var enemyData = _LEVEL_DATA[levelKey]["enemy"];
-	for (const entry of enemyData)
-	{
-		var key = entry;
-		var image = _ENEMY_DATA[key]["image"];
-		game.load.image(key, image);
-	}
-	loadAssets();
+	loadAssets(levelKey);
 
 	// Set background color
 	setBackgroundColor('#f3f3f3');
@@ -536,14 +550,15 @@ function updateEnemies()
 	// Update all enemies
 	enemies.forEach(updateEnemy, this, true);
 
-	var isEmpty = enemies.children.length === 0;
-	var randMin = _LEVEL_DATA[level]["rate"][0];
-	var randMax = _LEVEL_DATA[level]["rate"][1];
+	var randMin  = _LEVEL_DATA[level]["rate"][0];
+	var randMax  = _LEVEL_DATA[level]["rate"][1];
 	var randRate = _LEVEL_DATA[level]["rate"][2];
 	var randomly = randint(randMin, randMax) < randRate;
+	var isEmpty  = enemies.children.length === 0;
+	var loaded   = hasLoaded;
 
 	// Randomly spawn a new enemy if none are onscreen and assets are loaded
-	if (loadComplete && isEmpty && randomly)
+	if (loaded && isEmpty && randomly)
 	{
 		var enemyKey = randomChoice(_LEVEL_DATA[level]["enemy"]);
 		createEnemy(enemyKey);
@@ -611,6 +626,7 @@ function preload()
 		'assets/font/font-light/font.png',
 		'assets/font/font-light/font.fnt'
 	);
+
 	game.load.bitmapFont(
 		'dark',
 		'assets/font/font-dark/font.png',

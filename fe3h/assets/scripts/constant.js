@@ -34,9 +34,9 @@ const BUTTON_Y = 400;
 const PLAYER_X      = 64;
 const PLAYER_Y      = BACKGROUND_Y - 300;
 const PLAYER_W      = 12;
-const PLAYER_H      = 24;
+const PLAYER_H      = 20;
 const PLAYER_BODY_X = 12;
-const PLAYER_BODY_Y = 8;
+const PLAYER_BODY_Y = 12;
 
 // Cloud constants
 const MIN_CLOUD_Y = 0;
