@@ -66,6 +66,11 @@ function addTiledSprite(x, y, w, h, tag)
 // Draws a colored rectangle
 function drawRect(x, y, w, h, color)
 {
+	x *= RATIO;
+	y *= RATIO;
+	w *= RATIO;
+	h *= RATIO;
+	
 	var graphics = game.add.graphics();
 	graphics.beginFill(color);
 	graphics.drawRect(x, y, w, h);
