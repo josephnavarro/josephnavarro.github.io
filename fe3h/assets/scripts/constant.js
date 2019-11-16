@@ -26,9 +26,16 @@ const BACKGROUND_BODY_X = 0;
 const BACKGROUND_BODY_Y = 56;
 const BACKGROUND_BODY_H = 16;
 
-// Button constants
-const BUTTON_X = 198;
-const BUTTON_Y = 400;
+// User interface constants
+const CREST_X       = 74;
+const CREST_Y       = 376;
+const RECT_UI_X     = 0;
+const RECT_UI_Y     = 360;
+const RECT_UI_W     = WIDTH;
+const RECT_UI_H     = HEIGHT - RECT_UI_Y;
+const RECT_UI_COLOR = 0xC8C8C8;
+const BUTTON_X      = 198;
+const BUTTON_Y      = 492;
 
 // Player constants
 const PLAYER_X      = 64;
@@ -47,8 +54,8 @@ const FONT_SIZE = 28;
 
 // Text constants
 const TEXT_GAME_OVER_X  = 144;
-const TEXT_GAME_OVER_Y  = 572;
-const TEXT_SCORE_X      = 392;
-const TEXT_SCORE_Y      = 8;
-const TEXT_SCORE_HIGH_X = 8;
-const TEXT_SCORE_HIGH_Y = 8;
+const TEXT_GAME_OVER_Y  = 642;
+const TEXT_SCORE_X      = 376;
+const TEXT_SCORE_Y      = 375;
+const TEXT_SCORE_HIGH_X = 24;
+const TEXT_SCORE_HIGH_Y = 375;

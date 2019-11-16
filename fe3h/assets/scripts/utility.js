@@ -63,6 +63,16 @@ function addTiledSprite(x, y, w, h, tag)
 }
 
 
+// Draws a colored rectangle
+function drawRect(x, y, w, h, color)
+{
+	var graphics = game.add.graphics();
+	graphics.beginFill(color);
+	graphics.drawRect(x, y, w, h);
+	graphics.endFill();
+}
+
+
 // Pad number with zeros on the left
 function padLeft(number, padding)
 {

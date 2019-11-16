@@ -14,16 +14,16 @@ var game = new Phaser.Game(
 
 
 // Globals
-var background;
-var button;
 var groupBackground;
 var groupClouds;
 var groupEmitter;
 var groupEnemy;
 var groupPlayer;
-var emitterTap;
-var enemy;
-var player;
+var spriteBackground;
+var spriteButton;
+var spriteEmitterTap;
+var spriteEnemy;
+var spritePlayer;
 var textGameOver;
 var textScore;
 var textScoreHigh;
@@ -43,7 +43,7 @@ function addButton()
 	var x = BUTTON_X * RATIO;
 	var y = BUTTON_Y * RATIO;
 
-	button = game.add.button(
+	spriteButton = game.add.button(
 		x, y,
 		'button',
 		handleButton,
@@ -51,10 +51,10 @@ function addButton()
 		0, 0, 0
 	);
 
-	unsmoothSprite(button);
-	scaleButtonSprite(button);
+	unsmoothSprite(spriteButton);
+	scaleButtonSprite(spriteButton);
 
-	return button;
+	return spriteButton;
 }
 
 
@@ -94,6 +94,16 @@ function addCloudGroup()
 }
 
 
+// Adds crest sprite
+function addCrest()
+{
+	drawRect(RECT_UI_X, RECT_UI_Y, RECT_UI_W, RECT_UI_H, RECT_UI_COLOR);
+	var crest = addSprite(CREST_X, CREST_Y, 'crest');
+	unsmoothSprite(crest);
+	scaleSprite(crest);
+}
+
+
 // Adds tap emitter sprite group
 function addEmitterGroup()
 {
@@ -111,22 +121,22 @@ function addEmitterTap()
 
 	// Add emitter and make particles
 	var numParticles = 12;
-	emitterTap = game.add.emitter(0, 0, numParticles);
-	emitterTap.makeParticles('tap', [0, 1, 2]);
-	emitterTap.setAlpha(0.3, 0.8);
+	spriteEmitterTap = game.add.emitter(0, 0, numParticles);
+	spriteEmitterTap.makeParticles('tap', [0, 1, 2]);
+	spriteEmitterTap.setAlpha(0.3, 0.8);
 
 	// Scale up emitter
 	var sx1 = RATIO * SPRITE_SCALE;
 	var sx2 = RATIO * SPRITE_SCALE;
 	var sy1 = RATIO * SPRITE_SCALE;
 	var sy2 = RATIO * SPRITE_SCALE;
-	emitterTap.setScale(sx1, sx2, sy1, sy2);
+	spriteEmitterTap.setScale(sx1, sx2, sy1, sy2);
 
 	// Normalize particle speeds
-	emitterTap.minParticleSpeed.x *= RATIO;
-	emitterTap.minParticleSpeed.y *= RATIO
-	emitterTap.maxParticleSpeed.x *= RATIO;
-	emitterTap.maxParticleSpeed.y *= RATIO;
+	spriteEmitterTap.minParticleSpeed.x *= RATIO;
+	spriteEmitterTap.minParticleSpeed.y *= RATIO
+	spriteEmitterTap.maxParticleSpeed.x *= RATIO;
+	spriteEmitterTap.maxParticleSpeed.y *= RATIO;
 
 	// Add emit event only once
 	if (!hasAddTap)
@@ -135,7 +145,7 @@ function addEmitterTap()
 		game.input.onDown.add(handleTap, this);
 	}
 
-	groupEmitter.add(emitterTap);
+	groupEmitter.add(spriteEmitterTap);
 }
 
 
@@ -153,15 +163,15 @@ function addEnemy(tag)
 	var dx = _ENEMY_DATA[tag]["body"][0];
 	var dy = _ENEMY_DATA[tag]["body"][1];
 
-	enemy = groupEnemy.create(x, y, tag);
+	spriteEnemy = groupEnemy.create(x, y, tag);
 
-	unsmoothSprite(enemy)
-	scaleSprite(enemy)
-	addPhysics(enemy, w, h, dx, dy, true);
+	unsmoothSprite(spriteEnemy)
+	scaleSprite(spriteEnemy)
+	addPhysics(spriteEnemy, w, h, dx, dy, true);
 
-	enemy.anchor.setTo(0, 1);
+	spriteEnemy.anchor.setTo(0, 1);
 
-	return enemy;
+	return spriteEnemy;
 }
 
 
@@ -177,7 +187,7 @@ function addEnemyGroup()
 // Adds user input handlers
 function addInput()
 {
-	game.input.onDown.add( function(p) { handleJump(player); }, this);
+	game.input.onDown.add( function(p) { handleJump(spritePlayer); }, this);
 }
 
 
@@ -212,22 +222,22 @@ function addPlayerSprite(x, y)
 	destroyPlayer();
 
 	// Add new sprite
-	player = addSprite(x, y, 'byleth');
-	unsmoothSprite(player);
-	scaleSprite(player);
-	addPlayerAnimations(player);
+	spritePlayer = addSprite(x, y, 'byleth');
+	unsmoothSprite(spritePlayer);
+	scaleSprite(spritePlayer);
+	addPlayerAnimations(spritePlayer);
 
 	var w  = PLAYER_W;
 	var h  = PLAYER_H;
 	var dx = PLAYER_BODY_X;
 	var dy = PLAYER_BODY_Y;
 
-	addPhysics(player, w, h, dx, dy);
-	addGravity(player);
+	addPhysics(spritePlayer, w, h, dx, dy);
+	addGravity(spritePlayer);
 
-	groupPlayer.add(player);
+	groupPlayer.add(spritePlayer);
 
-	return player;
+	return spritePlayer;
 }
 
 
@@ -244,15 +254,15 @@ function addScrollingBackground(x, y)
 	var dy  = RATIO * BACKGROUND_BODY_Y;
 	var key = _LEVEL_DATA[level]['background'];
 
-	background = addTiledSprite(x, y, w, h, key);
+	spriteBackground = addTiledSprite(x, y, w, h, key);
 
 	w *= RATIO;
 	h *= RATIO;
-	addPhysics(background, w, h, dx, dy, true);
+	addPhysics(spriteBackground, w, h, dx, dy, true);
 
-	groupBackground.add(background);
+	groupBackground.add(spriteBackground);
 
-	return background;
+	return spriteBackground;
 }
 
 
@@ -313,10 +323,10 @@ function addTextScoreHigh()
 // Destroys background image
 function destroyBackground()
 {
-	if (background)
+	if (spriteBackground)
 	{
-		groupBackground.remove(background);
-		background.destroy();
+		groupBackground.remove(spriteBackground);
+		spriteBackground.destroy();
 	}
 }
 
@@ -338,10 +348,10 @@ function destroyClouds()
 // Destroys tap emitter
 function destroyEmitterTap()
 {
-	if (emitterTap)
+	if (spriteEmitterTap)
 	{
-		groupEmitter.remove(emitterTap, false, false);
-		emitterTap.destroy();
+		groupEmitter.remove(spriteEmitterTap, false, false);
+		spriteEmitterTap.destroy();
 	}
 }
 
@@ -363,10 +373,10 @@ function destroyEnemies()
 // Destroys player sprite
 function destroyPlayer()
 {
-	if (player)
+	if (spritePlayer)
 	{
-		groupPlayer.remove(player, false, false);
-		player.destroy();
+		groupPlayer.remove(spritePlayer, false, false);
+		spritePlayer.destroy();
 	}
 }
 
@@ -388,7 +398,7 @@ function getMultiplier()
 // Handles reset button click events
 function handleButton()
 {
-	if (button) { button.destroy(); }
+	if (spriteButton) { spriteButton.destroy(); }
 	startGame(level);
 }
 
@@ -440,15 +450,15 @@ function handlePlayerGround(player, ground)
 // Handles a tap burst
 function handleTap(pointer)
 {
-	emitterTap.x = pointer.x;
-	emitterTap.y = pointer.y;
-	emitterTap.explode(500, 6);
+	spriteEmitterTap.x = pointer.x;
+	spriteEmitterTap.y = pointer.y;
+	spriteEmitterTap.explode(500, 6);
 
 	var sx = RATIO * SPRITE_SCALE;
 	var sy = RATIO * SPRITE_SCALE;
 
 	// Scale up and de-antialias particles
-	emitterTap.children.forEach(
+	spriteEmitterTap.children.forEach(
         function(_)
         {
 			unsmoothSprite(_);
@@ -546,7 +556,7 @@ function updateBackground()
 	if (!isDead)
 	{
 		var dx = SCROLL_SPEED * getMultiplier();
-		background.tilePosition.x -= dx;
+		spriteBackground.tilePosition.x -= dx;
 	}
 }
 
@@ -622,7 +632,7 @@ function updateEnemies()
 function updatePlayerEnemy()
 {
 	game.physics.arcade.collide(
-		player,
+		spritePlayer,
 		groupEnemy,
 		handlePlayerEnemy,
 		null,
@@ -635,8 +645,8 @@ function updatePlayerEnemy()
 function updatePlayerGround()
 {
 	game.physics.arcade.collide(
-		player,
-		background,
+		spritePlayer,
+		spriteBackground,
 		handlePlayerGround,
 		null,
 		this
@@ -691,6 +701,7 @@ function preload()
 	game.load.spritesheet('tap', 'assets/sparkle.png', 9, 9);
 
 	// Load images
+	game.load.image('crest', 'assets/crest.png');
 	game.load.image('cloud', 'assets/cloud.png');
 
 	// Load all images defined under background data
@@ -706,6 +717,9 @@ function preload()
 // Create callback
 function create()
 {
+	// Add crest sprite
+	addCrest();
+
 	// Add cloud group
 	addCloudGroup();
 
@@ -737,9 +751,9 @@ function render()
 	try
 	{
 		///*
-		game.debug.body(background);
-		game.debug.body(player);
-		game.debug.body(enemy);
+		//game.debug.body(spriteBackground);
+		//game.debug.body(spritePlayer);
+		//game.debug.body(spriteEnemy);
 		//*/
 	}
 	catch (e) {}
