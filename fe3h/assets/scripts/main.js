@@ -156,12 +156,15 @@ function addEnemy(tag)
 	destroyEnemies();
 
 	// Create new enemy
-	var x  = RATIO * game.world.width;
-	var y  = RATIO * (BACKGROUND_Y + BACKGROUND_BODY_Y);
-	var w  = _ENEMY_DATA[tag]["body"][2];
-	var h  = _ENEMY_DATA[tag]["body"][3];
-	var dx = _ENEMY_DATA[tag]["body"][0];
-	var dy = _ENEMY_DATA[tag]["body"][1];
+	var bgKey   = getBackground();
+	var bgY     = _BG_DATA[bgKey]['y'];
+	var bgBodyY = _BG_DATA[bgKey]['body-y'];
+	var w       = _ENEMY_DATA[tag]['body'][2];
+	var h       = _ENEMY_DATA[tag]['body'][3];
+	var dx      = _ENEMY_DATA[tag]['body'][0];
+	var dy      = _ENEMY_DATA[tag]['body'][1];
+	var x       = RATIO * game.world.width;
+	var y       = RATIO * (bgY + bgBodyY);
 
 	spriteEnemy = groupEnemy.create(x, y, tag);
 
@@ -242,23 +245,26 @@ function addPlayerSprite(x, y)
 
 
 // Adds the scrolling, tiled background
-function addScrollingBackground(x, y)
+function addScrollingBackground()
 {
 	// Destroy old background (if any)
 	destroyBackground();
 
 	// Add new background
-	var w   = game.world.width;
-	var h   = BACKGROUND_BODY_H * SPRITE_SCALE;
-	var dx  = RATIO * BACKGROUND_BODY_X;
-	var dy  = RATIO * BACKGROUND_BODY_Y;
-	var key = _LEVEL_DATA[level]['background'];
+	var bgKey   = getBackground();
+	var bgBodyX = _BG_DATA[bgKey]['body-x'];
+	var bgBodyY = _BG_DATA[bgKey]['body-y'];
+	var x       = _BG_DATA[bgKey]['x'];
+	var y       = _BG_DATA[bgKey]['y'];
+	var w       = game.world.width;
+	var h       = RATIO * SPRITE_SCALE * _BG_DATA[bgKey]['h'];
+	var bodyH   = RATIO * SPRITE_SCALE * _BG_DATA[bgKey]['body-h'];
+	var dx      = RATIO * _BG_DATA[bgKey]['body-x'];
+	var dy      = RATIO * _BG_DATA[bgKey]['body-y'];
 
-	spriteBackground = addTiledSprite(x, y, w, h, key);
+	spriteBackground = addTiledSprite(x, y, w, h, bgKey);
 
-	w *= RATIO;
-	h *= RATIO;
-	addPhysics(spriteBackground, w, h, dx, dy, true);
+	addPhysics(spriteBackground, RATIO * w, bodyH, dx, dy, true);
 
 	groupBackground.add(spriteBackground);
 
@@ -385,6 +391,13 @@ function destroyPlayer()
 function destroyTextGameOver()
 {
 	if (textGameOver) { textGameOver.destroy(); }
+}
+
+
+// Returns current background key
+function getBackground()
+{
+	return _LEVEL_DATA[level]['background'];
 }
 
 
@@ -534,7 +547,7 @@ function startGame(levelKey)
 	setDead(false);
 
 	// Add background sprite
-	addScrollingBackground(BACKGROUND_X, BACKGROUND_Y);
+	addScrollingBackground();
 
 	// Add Byleth, the player!
 	playAnimation(addPlayerSprite(PLAYER_X, PLAYER_Y), 'jump', false, 1);
@@ -708,7 +721,7 @@ function preload()
 	for (const entry of Object.entries(_BG_DATA))
 	{
 		var key = entry[0];
-		var image = entry[1];
+		var image = entry[1]['image'];
 		game.load.image(key, image);
 	}
 }

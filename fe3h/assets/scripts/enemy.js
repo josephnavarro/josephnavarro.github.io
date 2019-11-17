@@ -1,6 +1,6 @@
 const _ENEMY_DATA = {
 	"alois": {
-		"body": [0, 0, 32, 32],
+		"body": [1, 8, 16, 16],
 		"image": "assets/enemy/alois.png"
 	},
 	"altered-demonic-beast": {
@@ -12,27 +12,27 @@ const _ENEMY_DATA = {
 		"image": "assets/enemy/altered_golem.png"
 	},
 	"annette-1": {
-		"body": [0, 0, 32, 32],
+		"body": [1, 8, 11, 16],
 		"image": "assets/enemy/annette_1.png"
 	},
 	"annette-2": {
-		"body": [0, 0, 32, 32],
+		"body": [1, 8, 11, 16],
 		"image": "assets/enemy/annette_2.png"
 	},
 	"ashe-1": {
-		"body": [0, 0, 32, 32],
+		"body": [1, 8, 16, 16],
 		"image": "assets/enemy/ashe_1.png"
 	},
 	"ashe-2": {
-		"body": [0, 0, 32, 32],
+		"body": [1, 8, 16, 16],
 		"image": "assets/enemy/ashe_2.png"
 	},
 	"bernadetta-1": {
-		"body": [0, 0, 32, 32],
+		"body": [1, 8, 16, 16],
 		"image": "assets/enemy/bernadetta_1.png"
 	},
 	"bernadetta-2": {
-		"body": [0, 0, 32, 32],
+		"body": [1, 8, 16, 16],
 		"image": "assets/enemy/bernadetta_2.png"
 	},
 	"black-beast": {

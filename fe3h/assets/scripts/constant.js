@@ -9,8 +9,8 @@ const DELTA_SCORE      = 0.2;
 const SCORE_MULTIPLIER = 500;
 
 // Sprite constants
-const SPRITE_SCALE     = 4;
 const SPRITE_FRAMERATE = 8;
+const SPRITE_SCALE     = 4;
 
 // Speed constants
 const SCROLL_SPEED = 1;
@@ -18,13 +18,6 @@ const CLOUD_SPEED  = 2;
 const ENEMY_SPEED  = 240;
 const JUMP_SPEED   = 1000;
 const GRAVITY      = 2500;
-
-// Background constants
-const BACKGROUND_X      = 0;
-const BACKGROUND_Y      = 272;
-const BACKGROUND_BODY_X = 0;
-const BACKGROUND_BODY_Y = 56;
-const BACKGROUND_BODY_H = 16;
 
 // User interface constants
 const CREST_X       = 74;
@@ -39,7 +32,7 @@ const BUTTON_Y      = 492;
 
 // Player constants
 const PLAYER_X      = 64;
-const PLAYER_Y      = BACKGROUND_Y - 300;
+const PLAYER_Y      = -28;
 const PLAYER_W      = 12;
 const PLAYER_H      = 20;
 const PLAYER_BODY_X = 12;
