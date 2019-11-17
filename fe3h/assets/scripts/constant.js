@@ -33,10 +33,10 @@ const BUTTON_Y      = 492;
 // Player constants
 const PLAYER_X      = 64;
 const PLAYER_Y      = -28;
-const PLAYER_W      = 12;
-const PLAYER_H      = 20;
+const PLAYER_W      = 8;
+const PLAYER_H      = 10;
 const PLAYER_BODY_X = 12;
-const PLAYER_BODY_Y = 12;
+const PLAYER_BODY_Y = 22;
 
 // Cloud constants
 const MIN_CLOUD_Y = 0;

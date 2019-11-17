@@ -6,7 +6,7 @@ const _BG_DATA = {
 		"h": 16,
 		"body-x": 0,
 		"body-y": 56,
-		"body-h": 16
+		"body-h": 8
 	},
 	"monastery": {
 		"image": "assets/background/monastery.png",
@@ -15,6 +15,6 @@ const _BG_DATA = {
 		"h": 90,
 		"body-x": 0,
 		"body-y": 328,
-		"body-h": 16
+		"body-h": 8
 	}
 }

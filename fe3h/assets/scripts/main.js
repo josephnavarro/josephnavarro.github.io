@@ -764,9 +764,9 @@ function render()
 	try
 	{
 		///*
-		//game.debug.body(spriteBackground);
-		//game.debug.body(spritePlayer);
-		//game.debug.body(spriteEnemy);
+		game.debug.body(spriteBackground);
+		game.debug.body(spritePlayer);
+		game.debug.body(spriteEnemy);
 		//*/
 	}
 	catch (e) {}

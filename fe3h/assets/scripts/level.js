@@ -17,7 +17,9 @@ const _LEVEL_DATA = {
 
 			//"alois",
 			//"annette-1",
-			"annette-2",
+			//"annette-2",
+			//"ashe-1",
+			"ashe-2",
 		],
 		"rate": [0, 100, 1]
 	}
