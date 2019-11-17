@@ -257,7 +257,7 @@ function addScrollingBackground()
 	var x       = _BG_DATA[bgKey]['x'];
 	var y       = _BG_DATA[bgKey]['y'];
 	var w       = game.world.width;
-	var h       = RATIO * SPRITE_SCALE * _BG_DATA[bgKey]['h'];
+	var h       = SPRITE_SCALE * _BG_DATA[bgKey]['h'];
 	var bodyH   = RATIO * SPRITE_SCALE * _BG_DATA[bgKey]['body-h'];
 	var dx      = RATIO * _BG_DATA[bgKey]['body-x'];
 	var dy      = RATIO * _BG_DATA[bgKey]['body-y'];
