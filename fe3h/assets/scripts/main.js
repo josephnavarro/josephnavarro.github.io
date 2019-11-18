@@ -126,17 +126,22 @@ function addEmitterTap()
 	spriteEmitterTap.setAlpha(0.3, 0.8);
 
 	// Scale up emitter
-	var sx1 = RATIO * SPRITE_SCALE;
-	var sx2 = RATIO * SPRITE_SCALE;
-	var sy1 = RATIO * SPRITE_SCALE;
-	var sy2 = RATIO * SPRITE_SCALE;
+	var scale = RATIO * SPRITE_SCALE;
+	var sx1 = scale;
+	var sx2 = scale;
+	var sy1 = scale;
+	var sy2 = scale;
 	spriteEmitterTap.setScale(sx1, sx2, sy1, sy2);
 
 	// Normalize particle speeds
-	spriteEmitterTap.minParticleSpeed.x *= RATIO;
-	spriteEmitterTap.minParticleSpeed.y *= RATIO
-	spriteEmitterTap.maxParticleSpeed.x *= RATIO;
-	spriteEmitterTap.maxParticleSpeed.y *= RATIO;
+	var speed = PARTICLE_SPEED * RATIO;
+	spriteEmitterTap.minParticleSpeed.x = -speed;
+	spriteEmitterTap.minParticleSpeed.y = -speed;
+	spriteEmitterTap.maxParticleSpeed.x = speed;
+	spriteEmitterTap.maxParticleSpeed.y = speed;
+
+	console.log(spriteEmitterTap.minParticleSpeed);
+	console.log(spriteEmitterTap.maxParticleSpeed);
 
 	// Add emit event only once
 	if (!hasAddTap)

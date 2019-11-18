@@ -13,6 +13,7 @@ const SPRITE_FRAMERATE = 8;
 const SPRITE_SCALE     = 4;
 
 // Speed constants
+const PARTICLE_SPEED = 200;
 const SCROLL_SPEED = 1;
 const CLOUD_SPEED  = 2;
 const ENEMY_SPEED  = 240;
