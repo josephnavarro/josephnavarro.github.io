@@ -1,6 +1,6 @@
 const _ENEMY_DATA = {
 	"alois": {
-		"body": [1, 8, 16, 16],
+		"body": [1, 9, 16, 12],
 		"image": "assets/enemy/alois.png"
 	},
 	"altered-demonic-beast": {

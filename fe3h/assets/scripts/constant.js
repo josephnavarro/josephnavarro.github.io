@@ -18,7 +18,7 @@ const SCROLL_SPEED   = 1;
 const CLOUD_SPEED    = 2;
 const ENEMY_SPEED    = 240;
 const JUMP_SPEED     = 1500;
-const GRAVITY        = 5000;
+const GRAVITY        = 6000;
 
 // User interface constants
 const CREST_X       = 74;
@@ -34,9 +34,9 @@ const BUTTON_Y      = 492;
 // Player constants
 const PLAYER_X      = 64;
 const PLAYER_Y      = -28;
-const PLAYER_W      = 8;
+const PLAYER_W      = 5;
 const PLAYER_H      = 10;
-const PLAYER_BODY_X = 12;
+const PLAYER_BODY_X = 15;
 const PLAYER_BODY_Y = 22;
 
 // Cloud constants
@@ -55,4 +55,4 @@ const TEXT_SCORE_HIGH_X = 24;
 const TEXT_SCORE_HIGH_Y = 375;
 
 // Timing constants
-const DELAY_ADD_ENEMY = 5;
+const DELAY_ADD_ENEMY = 60;
