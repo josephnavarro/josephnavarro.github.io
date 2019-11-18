@@ -22,19 +22,19 @@ var groupPlayer;
 var spriteBackground;
 var spriteButton;
 var spriteEmitterTap;
-var spriteEnemy;
 var spritePlayer;
 var textGameOver;
 var textScore;
 var textScoreHigh;
 
-var hasAddTap = false;
-var isContact = false;
-var isDead    = false;
-var level     = 'basic';
-var hasLoaded = false;
-var score     = 0;
-var scoreHigh = 0;
+var delayAddEnemy = 0;
+var hasAddTap     = false;
+var hasLoaded     = false;
+var isContact     = false;
+var isDead        = false;
+var level         = 'basic';
+var score         = 0;
+var scoreHigh     = 0;
 
 
 // Adds restart button
@@ -134,14 +134,11 @@ function addEmitterTap()
 	spriteEmitterTap.setScale(sx1, sx2, sy1, sy2);
 
 	// Normalize particle speeds
-	var speed = PARTICLE_SPEED * RATIO;
+	var speed = RATIO * PARTICLE_SPEED;
 	spriteEmitterTap.minParticleSpeed.x = -speed;
 	spriteEmitterTap.minParticleSpeed.y = -speed;
 	spriteEmitterTap.maxParticleSpeed.x = speed;
 	spriteEmitterTap.maxParticleSpeed.y = speed;
-
-	console.log(spriteEmitterTap.minParticleSpeed);
-	console.log(spriteEmitterTap.maxParticleSpeed);
 
 	// Add emit event only once
 	if (!hasAddTap)
@@ -157,9 +154,6 @@ function addEmitterTap()
 // Creates a new enemy
 function addEnemy(tag)
 {
-	// Clean up all enemies
-	destroyEnemies();
-
 	// Create new enemy
 	var bgKey   = getBackground();
 	var bgY     = _BG_DATA[bgKey]['y'];
@@ -171,15 +165,15 @@ function addEnemy(tag)
 	var x       = RATIO * game.world.width;
 	var y       = RATIO * (bgY + bgBodyY);
 
-	spriteEnemy = groupEnemy.create(x, y, tag);
+	var enemy = groupEnemy.create(x, y, tag);
 
-	unsmoothSprite(spriteEnemy)
-	scaleSprite(spriteEnemy)
-	addPhysics(spriteEnemy, w, h, dx, dy, true);
+	unsmoothSprite(enemy)
+	scaleSprite(enemy)
+	addPhysics(enemy, w, h, dx, dy, true);
 
-	spriteEnemy.anchor.setTo(0, 1);
+	enemy.anchor.setTo(0, 1);
 
-	return spriteEnemy;
+	return enemy;
 }
 
 
@@ -346,10 +340,9 @@ function destroyBackground()
 function destroyClouds()
 {
 	groupClouds.forEach(
-		function(_)
+		function(cloud)
 		{
-			groupClouds.remove(_);
-			_.destroy();
+			groupClouds.remove(cloud, true);
 		},
 		this
 	);
@@ -361,8 +354,7 @@ function destroyEmitterTap()
 {
 	if (spriteEmitterTap)
 	{
-		groupEmitter.remove(spriteEmitterTap, false, false);
-		spriteEmitterTap.destroy();
+		groupEmitter.remove(spriteEmitterTap, true, false);
 	}
 }
 
@@ -370,14 +362,7 @@ function destroyEmitterTap()
 // Destroys all current enemies
 function destroyEnemies()
 {
-	groupEnemy.forEach(
-		function(_)
-		{
-			groupEnemy.remove(_);
-			_.destroy();
-		},
-		this
-	);
+	addEnemyGroup();
 }
 
 
@@ -386,8 +371,7 @@ function destroyPlayer()
 {
 	if (spritePlayer)
 	{
-		groupPlayer.remove(spritePlayer, false, false);
-		spritePlayer.destroy();
+		groupPlayer.remove(spritePlayer, true, false);
 	}
 }
 
@@ -437,10 +421,15 @@ function handlePlayerEnemy(player, enemy)
 {
 	if (player.body.touching.right || player.body.touching.down)
 	{
-		// Stop enemy
-		enemy.body.stopMovement();
-		enemy.body.velocity.x = 0;
-		enemy.body.velocity.y = 0;
+		// Stop all enemies
+		groupEnemy.forEach(
+			function(e)
+			{
+				e.body.stopMovement();
+				e.body.velocity.x = 0;
+				e.body.velocity.y = 0;
+			}
+		)
 
 		// Stop player
 		player.body.velocity.x = 0;
@@ -477,10 +466,10 @@ function handleTap(pointer)
 
 	// Scale up and de-antialias particles
 	spriteEmitterTap.children.forEach(
-        function(_)
+        function(tap)
         {
-			unsmoothSprite(_);
-            _.scale.setTo(sx, sy);
+			unsmoothSprite(tap);
+            tap.scale.setTo(sx, sy);
         }
     );
 }
@@ -489,10 +478,8 @@ function handleTap(pointer)
 // Dynamically loads assets during runtime
 function loadAssets()
 {
+	hasLoaded = false;
 	game.load.onLoadComplete.add(loadComplete, this);
-
-	// Pause game to load resources
-	game.paused = true;
 
 	// Load enemies defined for this level
 	var enemyData = _LEVEL_DATA[level]["enemy"];
@@ -503,8 +490,6 @@ function loadAssets()
 		game.load.image(key, image);
 	}
 
-	// Resume game and process loads
-	game.paused = false;
 	game.load.start();
 }
 
@@ -533,17 +518,17 @@ function setLevel(key)
 // Starts game
 function startGame(levelKey)
 {
-	// Set current level key
-	setLevel(levelKey);
+	// Clear all old enemy objects (if any)
+	destroyEnemies();
 
 	// Load all images defined under this level's enemy data
 	loadAssets();
 
+	// Set current level key
+	setLevel(levelKey);
+
 	// Clear "game over" text (if any)
 	destroyTextGameOver();
-
-	// Clear all old enemy objects (if any)
-	destroyEnemies();
 
 	// Set background color
 	setBackgroundColor('#f3f3f3');
@@ -627,21 +612,32 @@ function updateEnemy(sprite)
 // Updates all enemy sprites
 function updateEnemies()
 {
+	if (!hasLoaded)
+	{
+		return;
+	}
 	// Update all enemies
 	groupEnemy.forEach(updateEnemy, this, true);
+
+	if (delayAddEnemy > 0)
+	{
+		delayAddEnemy -= 1;
+	}
 
 	var randMin  = _LEVEL_DATA[level]["rate"][0];
 	var randMax  = _LEVEL_DATA[level]["rate"][1];
 	var randRate = _LEVEL_DATA[level]["rate"][2];
 	var randomly = randint(randMin, randMax) < randRate;
-	var isEmpty  = groupEnemy.children.length === 0;
-	var loaded   = hasLoaded;
+	var isRoom   = groupEnemy.children.length < 2;
+	var isLoaded = hasLoaded;
+	var noDelay  = delayAddEnemy <= 0;
 
-	// Randomly spawn a new enemy if none are onscreen and assets are loaded
-	if (loaded && isEmpty && randomly)
+	// Randomly spawn a new enemy if there's room and assets are loaded
+	if (isLoaded && isRoom && randomly && noDelay)
 	{
 		var enemyKey = randomChoice(_LEVEL_DATA[level]["enemy"]);
 		addEnemy(enemyKey);
+		delayAddEnemy = DELAY_ADD_ENEMY;
 	}
 }
 
@@ -771,7 +767,13 @@ function render()
 		///*
 		game.debug.body(spriteBackground);
 		game.debug.body(spritePlayer);
-		game.debug.body(spriteEnemy);
+		groupEnemy.children.forEach(
+			function (enemy)
+			{
+				game.debug.body(enemy);
+			},
+			this
+		);
 		//*/
 	}
 	catch (e) {}

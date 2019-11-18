@@ -16,10 +16,16 @@ const _LEVEL_DATA = {
 			//"giant-wolf",
 
 			//"alois",
-			//"annette-1",
+			"annette-1",
 			//"annette-2",
-			//"ashe-1",
-			"ashe-2",
+			"ashe-1",
+			//"ashe-2",
+			"bernadetta-1",
+			//"bernadetta-2",
+			"byleth-f-1",
+			//"byleth-f-2",
+			//"byleth-m-1",
+			//"byleth-m-2",
 		],
 		"rate": [0, 100, 1]
 	}

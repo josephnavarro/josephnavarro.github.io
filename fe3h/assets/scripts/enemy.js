@@ -28,11 +28,11 @@ const _ENEMY_DATA = {
 		"image": "assets/enemy/ashe_2.png"
 	},
 	"bernadetta-1": {
-		"body": [1, 8, 16, 16],
+		"body": [1, 9, 11, 11],
 		"image": "assets/enemy/bernadetta_1.png"
 	},
 	"bernadetta-2": {
-		"body": [1, 8, 16, 16],
+		"body": [1, 9, 11, 11],
 		"image": "assets/enemy/bernadetta_2.png"
 	},
 	"black-beast": {
@@ -40,19 +40,19 @@ const _ENEMY_DATA = {
 		"image": "assets/enemy/black_beast.png"
 	},
 	"byleth-f-1": {
-		"body": [0, 0, 32, 32],
+		"body": [1, 9, 15, 11],
 		"image": "assets/enemy/byleth_f_1.png"
 	},
 	"byleth-f-2": {
-		"body": [0, 0, 32, 32],
+		"body": [1, 9, 15, 11],
 		"image": "assets/enemy/byleth_f_2.png"
 	},
 	"byleth-m-1": {
-		"body": [0, 0, 32, 32],
+		"body": [1, 9, 15, 11],
 		"image": "assets/enemy/byleth_m_1.png"
 	},
 	"byleth-m-2": {
-		"body": [0, 0, 32, 32],
+		"body": [1, 9, 15, 11],
 		"image": "assets/enemy/byleth_m_2.png"
 	},
 	"caspar-1": {
