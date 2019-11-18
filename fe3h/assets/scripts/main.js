@@ -369,10 +369,7 @@ function destroyEnemies()
 // Destroys player sprite
 function destroyPlayer()
 {
-	if (spritePlayer)
-	{
-		groupPlayer.remove(spritePlayer, true, false);
-	}
+	addPlayerGroup();
 }
 
 

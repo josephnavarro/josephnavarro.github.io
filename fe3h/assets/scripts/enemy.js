@@ -56,19 +56,19 @@ const _ENEMY_DATA = {
 		"image": "assets/enemy/byleth_m_2.png"
 	},
 	"caspar-1": {
-		"body": [0, 0, 32, 32],
+		"body": [1, 9, 13, 11],
 		"image": "assets/enemy/caspar_1.png"
 	},
 	"caspar-2": {
-		"body": [0, 0, 32, 32],
+		"body": [1, 9, 13, 11],
 		"image": "assets/enemy/caspar_2.png"
 	},
 	"catherine": {
-		"body": [0, 0, 32, 32],
+		"body": [1, 9, 13, 11],
 		"image": "assets/enemy/catherine.png"
 	},
 	"claude-1": {
-		"body": [0, 0, 32, 32],
+		"body": [1, 9, 15, 11],
 		"image": "assets/enemy/claude_1.png"
 	},
 	"claude-2": {
