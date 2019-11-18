@@ -17,8 +17,8 @@ const PARTICLE_SPEED = 200;
 const SCROLL_SPEED   = 1;
 const CLOUD_SPEED    = 2;
 const ENEMY_SPEED    = 240;
-const JUMP_SPEED     = 1000;
-const GRAVITY        = 2500;
+const JUMP_SPEED     = 1500;
+const GRAVITY        = 5000;
 
 // User interface constants
 const CREST_X       = 74;

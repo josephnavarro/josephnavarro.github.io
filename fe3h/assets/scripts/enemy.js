@@ -12,11 +12,11 @@ const _ENEMY_DATA = {
 		"image": "assets/enemy/altered_golem.png"
 	},
 	"annette-1": {
-		"body": [1, 8, 11, 16],
+		"body": [1, 9, 11, 11],
 		"image": "assets/enemy/annette_1.png"
 	},
 	"annette-2": {
-		"body": [1, 8, 11, 16],
+		"body": [1, 9, 11, 11],
 		"image": "assets/enemy/annette_2.png"
 	},
 	"ashe-1": {
