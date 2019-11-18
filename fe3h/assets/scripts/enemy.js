@@ -60,67 +60,67 @@ const _ENEMY_DATA = {
 		"image": "assets/enemy/caspar_1.png"
 	},
 	"caspar-2": {
-		"body": [1, 9, 13, 11],
+		"body": [1, 9, 14, 11],
 		"image": "assets/enemy/caspar_2.png"
 	},
 	"catherine": {
-		"body": [1, 9, 13, 11],
+		"body": [1, 9, 13, 12],
 		"image": "assets/enemy/catherine.png"
 	},
 	"claude-1": {
-		"body": [1, 9, 15, 11],
+		"body": [1, 9, 11, 11],
 		"image": "assets/enemy/claude_1.png"
 	},
 	"claude-2": {
-		"body": [0, 0, 32, 32],
+		"body": [1, 9, 12, 11],
 		"image": "assets/enemy/claude_2.png"
 	},
 	"cyril-1": {
-		"body": [0, 0, 32, 32],
+		"body": [1, 9, 12, 11],
 		"image": "assets/enemy/cyril_1.png"
 	},
 	"cyril-2": {
-		"body": [0, 0, 32, 32],
+		"body": [1, 9, 12, 12],
 		"image": "assets/enemy/cyril_2.png"
 	},
 	"death-knight": {
-		"body": [4, 8, 16, 20],
+		"body": [8, 9, 9, 19],
 		"image": "assets/enemy/death_knight.png"
 	},
 	"dedue-1": {
-		"body": [0, 0, 32, 32],
+		"body": [1, 9, 14, 12],
 		"image": "assets/enemy/dedue_1.png"
 	},
 	"dedue-2": {
-		"body": [0, 0, 32, 32],
+		"body": [1, 9, 15, 12],
 		"image": "assets/enemy/dedue_2.png"
 	},
 	"demonic-beast": {
-		"body": [8, 8, 16, 17],
+		"body": [10, 8, 11, 17],
 		"image": "assets/enemy/demonic_beast.png"
 	},
 	"dimitri-1": {
-		"body": [0, 0, 32, 32],
+		"body": [1, 9, 13, 11],
 		"image": "assets/enemy/dimitri_1.png"
 	},
 	"dimitri-2": {
-		"body": [0, 0, 32, 32],
+		"body": [1, 9, 12, 11],
 		"image": "assets/enemy/dimitri_2.png"
 	},
 	"dorothea-1": {
-		"body": [0, 0, 32, 32],
+		"body": [1, 9, 12, 11],
 		"image": "assets/enemy/dorothea_1.png"
 	},
 	"dorothea-2": {
-		"body": [0, 0, 32, 32],
+		"body": [1, 9, 13, 11],
 		"image": "assets/enemy/dorothea_2.png"
 	},
 	"edelgard-1": {
-		"body": [0, 0, 32, 32],
+		"body": [1, 9, 13, 11],
 		"image": "assets/enemy/edelgard_1.png"
 	},
 	"edelgard-2": {
-		"body": [0, 0, 32, 32],
+		"body": [1, 9, 13, 11],
 		"image": "assets/enemy/edelgard_2.png"
 	},
 	"experimental-demonic-beast": {

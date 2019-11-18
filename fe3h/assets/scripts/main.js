@@ -15,6 +15,7 @@ var game = new Phaser.Game(
 
 // Globals
 var groupBackground;
+var groupButton;
 var groupClouds;
 var groupEmitter;
 var groupEnemy;
@@ -43,6 +44,14 @@ function addButton()
 	var x = BUTTON_X * RATIO;
 	var y = BUTTON_Y * RATIO;
 
+	groupButton.forEach(
+		function(button)
+		{
+			groupButton.remove(button, true);
+		},
+		this
+	);
+
 	spriteButton = game.add.button(
 		x, y,
 		'button',
@@ -54,7 +63,18 @@ function addButton()
 	unsmoothSprite(spriteButton);
 	scaleButtonSprite(spriteButton);
 
+	groupButton.add(spriteButton);
+
 	return spriteButton;
+}
+
+
+// Adds button group
+function addButtonGroup()
+{
+	if (groupButton) { groupButton.destroy(); }
+	groupButton = game.add.group();
+	return groupButton;
 }
 
 
@@ -736,6 +756,9 @@ function create()
 
 	// Add background group
 	addBackgroundGroup();
+
+	// Add button group
+	addButtonGroup();
 
 	// Add enemy group
 	addEnemyGroup();
