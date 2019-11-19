@@ -228,59 +228,59 @@ const _ENEMY_DATA = {
 		"image": "assets/enemy/leonie_1.png"
 	},
 	"leonie-2": {
-		"body": [1, 9, 13, 11],
+		"body": [1, 9, 12, 11],
 		"image": "assets/enemy/leonie_2.png"
 	},
 	"linhardt-1": {
-		"body": [0, 0, 32, 32],
+		"body": [1, 9, 12, 11],
 		"image": "assets/enemy/linhardt_1.png"
 	},
 	"linhardt-2": {
-		"body": [0, 0, 32, 32],
+		"body": [1, 9, 12, 11],
 		"image": "assets/enemy/linhardt_2.png"
 	},
 	"lord-of-the-desert": {
-		"body": [0, 0, 32, 32],
+		"body": [8, 15, 16, 12],
 		"image": "assets/enemy/lord_of_the_desert.png"
 	},
 	"lord-of-the-lake": {
-		"body": [0, 0, 32, 32],
+		"body": [8, 10, 16, 12],
 		"image": "assets/enemy/lord_of_the_lake.png"
 	},
 	"lorenz-1": {
-		"body": [0, 0, 32, 32],
+		"body": [1, 9, 13, 11],
 		"image": "assets/enemy/lorenz_1.png"
 	},
 	"lorenz-2": {
-		"body": [0, 0, 32, 32],
+		"body": [1, 9, 13, 11],
 		"image": "assets/enemy/lorenz_2.png"
 	},
 	"lysithea-1": {
-		"body": [0, 0, 32, 32],
+		"body": [1, 9, 11, 11],
 		"image": "assets/enemy/lysithea_1.png"
 	},
 	"lysithea-2": {
-		"body": [0, 0, 32, 32],
+		"body": [1, 9, 13, 11],
 		"image": "assets/enemy/lysithea_2.png"
 	},
 	"manuela": {
-		"body": [0, 0, 32, 32],
+		"body": [3, 9, 11, 11],
 		"image": "assets/enemy/manuela.png"
 	},
 	"marianne-1": {
-		"body": [0, 0, 32, 32],
+		"body": [1, 9, 11, 11],
 		"image": "assets/enemy/marianne_1.png"
 	},
 	"marianne-2": {
-		"body": [0, 0, 32, 32],
+		"body": [1, 9, 10, 11],
 		"image": "assets/enemy/marianne_2.png"
 	},
 	"mercedes-1": {
-		"body": [0, 0, 32, 32],
+		"body": [1, 9, 11, 11],
 		"image": "assets/enemy/mercedes_1.png"
 	},
 	"mercedes-2": {
-		"body": [0, 0, 32, 32],
+		"body": [1, 9, 10, 11],
 		"image": "assets/enemy/mercedes_2.png"
 	},
 	"petra-1": {

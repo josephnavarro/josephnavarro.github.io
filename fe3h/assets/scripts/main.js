@@ -14,9 +14,11 @@ var game = new Phaser.Game(
 
 
 // Globals
+var graphicsDead;
 var groupBackground;
 var groupButton;
 var groupClouds;
+var groupDead;
 var groupEmitter;
 var groupEnemy;
 var groupPlayer;
@@ -67,8 +69,23 @@ function addButton()
 }
 
 
+// Adds "dead" colored graphic
+function addGraphicsDead()
+{
+	if (graphicsDead) { graphicsDead.kill(); }
+	graphicsDead = drawRect(
+		RECT_DEAD_X,
+		RECT_DEAD_Y,
+		RECT_DEAD_W,
+		RECT_DEAD_H,
+		RECT_DEAD_COLOR,
+	);
+	groupDead.add(graphicsDead);
+}
+
+
 // Adds button group
-function addButtonGroup()
+function addGroupButton()
 {
 	if (groupButton) { groupButton.destroy(); }
 	groupButton = game.add.group();
@@ -77,11 +94,20 @@ function addButtonGroup()
 
 
 // Adds background group
-function addBackgroundGroup()
+function addGroupBackground()
 {
 	if (groupBackground) { groupBackground.destroy(); }
 	groupBackground = game.add.group();
 	return groupBackground;
+}
+
+
+// Adds "dead" colored graphics group
+function addGroupDead()
+{
+	if (groupDead) { groupDead.destroy(); }
+	groupDead = game.add.group();
+	return groupDead;
 }
 
 
@@ -104,7 +130,7 @@ function addCloud()
 
 
 // Adds cloud group
-function addCloudGroup()
+function addGroupCloud()
 {
 	if (groupClouds) { groupClouds.destroy(); }
 	groupClouds = game.add.group();
@@ -113,7 +139,7 @@ function addCloudGroup()
 
 
 // Adds crest sprite for UI
-function addCrest()
+function addSpriteCrest()
 {
 	drawRect(RECT_UI_X, RECT_UI_Y, RECT_UI_W, RECT_UI_H, RECT_UI_COLOR);
 	var crest = addSprite(CREST_X, CREST_Y, 'crest');
@@ -123,7 +149,7 @@ function addCrest()
 
 
 // Adds tap emitter sprite group
-function addEmitterGroup()
+function addGroupEmitter()
 {
 	if (groupEmitter) { groupEmitter.destroy(); }
 	groupEmitter = game.add.group();
@@ -138,7 +164,7 @@ function addEmitterTap()
 	destroyEmitterTap();
 
 	// Add emitter and make particles
-	var numParticles = 12;
+	var numParticles = EMITTER_NUM_PARTICLES;
 	spriteEmitterTap = game.add.emitter(0, 0, numParticles);
 	spriteEmitterTap.makeParticles('tap', [0, 1, 2]);
 	spriteEmitterTap.setAlpha(0.3, 0.8);
@@ -173,9 +199,9 @@ function addEmitterTap()
 function addEnemy(tag)
 {
 	// Create new enemy
-	var bgKey   = getBackground();
-	var bgY     = _BG_DATA[bgKey]['y'];
-	var bgBodyY = _BG_DATA[bgKey]['body-y'];
+	var bg      = getBackground();
+	var bgY     = _BG_DATA[bg]['y'];
+	var bgBodyY = _BG_DATA[bg]['body-y'];
 	var w       = _ENEMY_DATA[tag]['body'][2];
 	var h       = _ENEMY_DATA[tag]['body'][3];
 	var dx      = _ENEMY_DATA[tag]['body'][0];
@@ -184,12 +210,11 @@ function addEnemy(tag)
 	var y       = RATIO * (bgY + bgBodyY);
 
 	var enemy = groupEnemy.create(x, y, tag);
-	enemy.name = tag;
-
 	unsmoothSprite(enemy)
 	scaleSprite(enemy)
 	addPhysics(enemy, w, h, dx, dy, true);
 
+	enemy.name = tag;
 	enemy.anchor.setTo(0, 1);
 
 	return enemy;
@@ -197,7 +222,7 @@ function addEnemy(tag)
 
 
 // Adds enemy group
-function addEnemyGroup()
+function addGroupEnemy()
 {
 	if (groupEnemy) { groupEnemy.destroy(); }
 	groupEnemy = game.add.group();
@@ -228,7 +253,7 @@ function addPlayerAnimations(sprite)
 
 
 // Adds player sprite group
-function addPlayerGroup()
+function addGroupPlayer()
 {
 	if (groupPlayer) { groupPlayer.destroy(); }
 	groupPlayer = game.add.group();
@@ -237,7 +262,7 @@ function addPlayerGroup()
 
 
 // Adds player sprite
-function addPlayerSprite(x, y)
+function addSpritePlayer(x, y)
 {
 	// Destroy old sprite (if any)
 	destroyPlayer();
@@ -263,24 +288,22 @@ function addPlayerSprite(x, y)
 
 
 // Adds the scrolling, tiled background
-function addScrollingBackground()
+function addTiledSpriteBackground()
 {
 	// Destroy old background (if any)
 	destroyBackground();
 
 	// Add new background
-	var bgKey   = getBackground();
-	var bgBodyX = _BG_DATA[bgKey]['body-x'];
-	var bgBodyY = _BG_DATA[bgKey]['body-y'];
-	var x       = _BG_DATA[bgKey]['x'];
-	var y       = _BG_DATA[bgKey]['y'];
-	var w       = game.world.width;
-	var h       = SPRITE_SCALE * _BG_DATA[bgKey]['h'];
-	var bodyH   = RATIO * SPRITE_SCALE * _BG_DATA[bgKey]['body-h'];
-	var dx      = RATIO * _BG_DATA[bgKey]['body-x'];
-	var dy      = RATIO * _BG_DATA[bgKey]['body-y'];
+	var bg    = getBackground();
+	var x     = _BG_DATA[bg]['x'];
+	var y     = _BG_DATA[bg]['y'];
+	var w     = game.world.width;
+	var h     = SPRITE_SCALE * _BG_DATA[bg]['h'];
+	var bodyH = RATIO * SPRITE_SCALE * _BG_DATA[bg]['body-h'];
+	var dx    = RATIO * _BG_DATA[bg]['body-x'];
+	var dy    = RATIO * _BG_DATA[bg]['body-y'];
 
-	spriteBackground = addTiledSprite(x, y, w, h, bgKey);
+	spriteBackground = addTiledSprite(x, y, w, h, bg);
 
 	addPhysics(spriteBackground, RATIO * w, bodyH, dx, dy, true);
 
@@ -394,14 +417,21 @@ function destroyEmitterTap()
 // Destroys all current enemies
 function destroyEnemies()
 {
-	addEnemyGroup();
+	addGroupEnemy();
 }
 
 
 // Destroys player sprite
 function destroyPlayer()
 {
-	addPlayerGroup();
+	addGroupPlayer();
+}
+
+
+// Destroys "dead" colored graphic
+function destroyGraphicsDead()
+{
+	if (graphicsDead) { graphicsDead.kill(); }
 }
 
 
@@ -464,6 +494,7 @@ function handlePlayerEnemy(player, enemy)
 				e.body.stopMovement();
 				e.body.velocity.x = 0;
 				e.body.velocity.y = 0;
+				e.tint = 0x000000;
 			}
 		)
 
@@ -471,10 +502,12 @@ function handlePlayerEnemy(player, enemy)
 		player.body.velocity.x = 0;
 		player.body.velocity.y = 0;
 		player.body.gravity.y = 0;
+		player.tint = 0x000000;
 
 		// Player is now dead
 		playAnimation(player, 'pose', false, 0);
 		setDead(true);
+		addGraphicsDead();
 
 		// Spawn reset button and game over text
 		addButton();
@@ -554,6 +587,9 @@ function setLevel(key)
 // Starts game
 function startGame(levelKey)
 {
+	// Kill "dead" colored graphics
+	destroyGraphicsDead();
+
 	// Clear all old enemy objects (if any)
 	destroyEnemies();
 
@@ -573,10 +609,10 @@ function startGame(levelKey)
 	setDead(false);
 
 	// Add background sprite
-	addScrollingBackground();
+	addTiledSpriteBackground();
 
 	// Add Byleth, the player!
-	playAnimation(addPlayerSprite(PLAYER_X, PLAYER_Y), 'jump', false, 1);
+	playAnimation(addSpritePlayer(PLAYER_X, PLAYER_Y), 'jump', false, 1);
 
 	// Add a lone cloud
 	addCloud();
@@ -648,42 +684,37 @@ function updateEnemy(sprite)
 // Updates all enemy sprites
 function updateEnemies()
 {
-	if (!hasLoaded) { return; }
-
-	// Update all enemies
-	groupEnemy.forEach(updateEnemy, this, true);
-
-	if (delayAddEnemy > 0)
+	if (hasLoaded)
 	{
-		delayAddEnemy -= 1;
-	}
+		// Update all enemies
+		groupEnemy.forEach(updateEnemy, this, true);
 
-	var randMin  = _LEVEL_DATA[level]["rate"][0];
-	var randMax  = _LEVEL_DATA[level]["rate"][1];
-	var randRate = _LEVEL_DATA[level]["rate"][2];
-	var randomly = randint(randMin, randMax) < randRate;
-	var isRoom   = groupEnemy.children.length < 2;
-	var noDelay  = delayAddEnemy <= 0;
+		if (delayAddEnemy > 0) { delayAddEnemy -= 1; }
 
-	// Randomly spawn a new enemy if there's room and assets are loaded
-	if (isRoom && randomly && noDelay)
-	{
-		var enemyKey = randomChoice(_LEVEL_DATA[level]["enemy"]);
-		var doAdd = true;
-		groupEnemy.forEach(
-			function(e)
-			{
-				if (e.name === enemyKey)
-				{
-					doAdd = false;
-				}
-			},
-			this
-		);
-		if (doAdd)
+		var randMin  = _LEVEL_DATA[level]['rate'][0];
+		var randMax  = _LEVEL_DATA[level]['rate'][1];
+		var randRate = _LEVEL_DATA[level]['rate'][2];
+		var randomly = randint(randMin, randMax) < randRate;
+		var isRoom   = groupEnemy.children.length < 2;
+		var noDelay  = delayAddEnemy <= 0;
+
+		// Randomly spawn a new enemy if there's room and delay is inactive
+		if (isRoom && randomly && noDelay)
 		{
-			addEnemy(enemyKey);
-			delayAddEnemy = DELAY_ADD_ENEMY;
+			var enemyKey = randomChoice(_LEVEL_DATA[level]['enemy']);
+			var doAdd = true;
+			groupEnemy.forEach(
+				function(e)
+				{
+					if (e.name === enemyKey) { doAdd = false; }
+				},
+				this
+			);
+			if (doAdd)
+			{
+				addEnemy(enemyKey);
+				delayAddEnemy = DELAY_ADD_ENEMY;
+			}
 		}
 	}
 }
@@ -779,22 +810,25 @@ function preload()
 function create()
 {
 	// Add crest sprite
-	addCrest();
+	addSpriteCrest();
 
 	// Add cloud group
-	addCloudGroup();
+	addGroupCloud();
 
 	// Add background group
-	addBackgroundGroup();
+	addGroupBackground();
+
+	// Add "dead" graphics group
+	addGroupDead();
 
 	// Add button group
-	addButtonGroup();
+	addGroupButton();
 
 	// Add enemy group
-	addEnemyGroup();
+	addGroupEnemy();
 
 	// Add player group
-	addPlayerGroup();
+	addGroupPlayer();
 
 	// Starts game
 	var levelKey = 'basic';
@@ -804,7 +838,7 @@ function create()
 	addInput();
 
 	// Add tap emitter
-	addEmitterGroup();
+	addGroupEmitter();
 	addEmitterTap();
 }
 
@@ -814,16 +848,10 @@ function render()
 {
 	try
 	{
-		///*
+		/*
 		game.debug.body(spriteBackground);
 		game.debug.body(spritePlayer);
-		groupEnemy.children.forEach(
-			function (enemy)
-			{
-				game.debug.body(enemy);
-			},
-			this
-		);
+		groupEnemy.children.forEach(function (e) { game.debug.body(e); }, this);
 		//*/
 	}
 	catch (e) {}

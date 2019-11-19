@@ -58,9 +58,23 @@ const _LEVEL_DATA = {
 			//"ignatz-2",
 			//"ingrid-1",
 			//"ingrid-2",
-			"jeralt",
-			"leonie-1",
+			//"jeralt",
+			//"leonie-1",
+			//"leonie-2",
+			//"linhardt-1",
+			//"linhardt-2",
+			//"lord-of-the-desert",
+			//"lord-of-the-lake",
+			//"lorenz-1",
+			//"lorenz-2",
+			//"lysithea-1",
+			//"lysithea-2",
+			//"manuela",
+			//"marianne-1",
+			//"marianne-2",
+			//"mercedes-1",
+			"mercedes-2",
 		],
-		"rate": [0, 100, 10]
+		"rate": [0, 100, 2]
 	}
 }

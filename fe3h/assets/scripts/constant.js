@@ -21,15 +21,20 @@ const JUMP_SPEED     = 1500;
 const GRAVITY        = 4800;
 
 // User interface constants
-const CREST_X       = 74;
-const CREST_Y       = 376;
-const RECT_UI_X     = 0;
-const RECT_UI_Y     = 360;
-const RECT_UI_W     = WIDTH;
-const RECT_UI_H     = HEIGHT - RECT_UI_Y;
-const RECT_UI_COLOR = 0xC8C8C8;
-const BUTTON_X      = 198;
-const BUTTON_Y      = 492;
+const CREST_X         = 74;
+const CREST_Y         = 376;
+const RECT_DEAD_X     = 0;
+const RECT_DEAD_Y     = 0;
+const RECT_DEAD_W     = WIDTH;
+const RECT_DEAD_H     = 360;
+const RECT_DEAD_COLOR = 0xFF0000;
+const RECT_UI_X       = 0;
+const RECT_UI_Y       = RECT_DEAD_H;
+const RECT_UI_W       = WIDTH;
+const RECT_UI_H       = HEIGHT - RECT_UI_Y;
+const RECT_UI_COLOR   = 0xC8C8C8;
+const BUTTON_X        = 198;
+const BUTTON_Y        = 492;
 
 // Player constants
 const PLAYER_X      = 64;
@@ -56,3 +61,6 @@ const TEXT_SCORE_HIGH_Y = 375;
 
 // Timing constants
 const DELAY_ADD_ENEMY = 60;
+
+// Emitter constants
+const EMITTER_NUM_PARTICLES = 15;

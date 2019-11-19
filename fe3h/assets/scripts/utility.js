@@ -70,11 +70,13 @@ function drawRect(x, y, w, h, color)
 	y *= RATIO;
 	w *= RATIO;
 	h *= RATIO;
-	
+
 	var graphics = game.add.graphics();
 	graphics.beginFill(color);
 	graphics.drawRect(x, y, w, h);
 	graphics.endFill();
+	
+	return graphics;
 }
 
 
