@@ -120,7 +120,7 @@ const _ENEMY_DATA = {
 		"image": "assets/enemy/edelgard_1.png"
 	},
 	"edelgard-2": {
-		"body": [1, 9, 13, 11],
+		"body": [4, 9, 9, 11],
 		"image": "assets/enemy/edelgard_2.png"
 	},
 	"experimental-demonic-beast": {
@@ -188,47 +188,47 @@ const _ENEMY_DATA = {
 		"image": "assets/enemy/hegemon_husk.png"
 	},
 	"hilda-1": {
-		"body": [0, 0, 32, 32],
+		"body": [3, 9, 11, 11],
 		"image": "assets/enemy/hilda_1.png"
 	},
 	"hilda-2": {
-		"body": [0, 0, 32, 32],
+		"body": [2, 10, 10, 11],
 		"image": "assets/enemy/hilda_2.png"
 	},
 	"hubert-1": {
-		"body": [0, 0, 32, 32],
+		"body": [1, 9, 13, 11],
 		"image": "assets/enemy/hubert_1.png"
 	},
 	"hubert-2": {
-		"body": [0, 0, 32, 32],
+		"body": [3, 9, 11, 11],
 		"image": "assets/enemy/hubert_2.png"
 	},
 	"ignatz-1": {
-		"body": [0, 0, 32, 32],
+		"body": [1, 9, 13, 11],
 		"image": "assets/enemy/ignatz_1.png"
 	},
 	"ignatz-2": {
-		"body": [0, 0, 32, 32],
+		"body": [1, 9, 13, 11],
 		"image": "assets/enemy/ignatz_2.png"
 	},
 	"ingrid-1": {
-		"body": [0, 0, 32, 32],
+		"body": [1, 9, 11, 11],
 		"image": "assets/enemy/ingrid_1.png"
 	},
 	"ingrid-2": {
-		"body": [0, 0, 32, 32],
+		"body": [1, 9, 11, 11],
 		"image": "assets/enemy/ingrid_2.png"
 	},
 	"jeralt": {
-		"body": [0, 0, 32, 32],
+		"body": [4, 10, 10, 11],
 		"image": "assets/enemy/jeralt.png"
 	},
 	"leonie-1": {
-		"body": [0, 0, 32, 32],
+		"body": [1, 9, 12, 11],
 		"image": "assets/enemy/leonie_1.png"
 	},
 	"leonie-2": {
-		"body": [0, 0, 32, 32],
+		"body": [1, 9, 13, 11],
 		"image": "assets/enemy/leonie_2.png"
 	},
 	"linhardt-1": {

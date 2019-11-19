@@ -15,7 +15,7 @@ const _LEVEL_DATA = {
 			//"giant-demonic-beast",
 			//"giant-wolf",
 			//"golem",
-			"hegemon-husk",
+			//"hegemon-husk",
 
 			//"alois",
 			//"annette-1",
@@ -50,7 +50,17 @@ const _LEVEL_DATA = {
 			//"flayn",
 			//"gilbert",
 			//"hanneman",
+			//"hilda-1",
+			//"hilda-2",
+			//"hubert-1",
+			//"hubert-2",
+			//"ignatz-1",
+			//"ignatz-2",
+			//"ingrid-1",
+			//"ingrid-2",
+			"jeralt",
+			"leonie-1",
 		],
-		"rate": [0, 100, 1]
+		"rate": [0, 100, 10]
 	}
 }

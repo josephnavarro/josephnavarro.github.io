@@ -429,10 +429,9 @@ function getMultiplier()
 // Handles reset button click events
 function handleButton()
 {
-	if (buttonCounter === 0)
-	{
-		buttonCounter += 1;
-	}
+	if (score < 500) { buttonCounter = 1; }
+
+	if (buttonCounter === 0) { buttonCounter += 1; }
 	else
 	{
 		if (spriteButton) { spriteButton.destroy(); }
