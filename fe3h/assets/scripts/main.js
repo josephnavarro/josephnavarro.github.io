@@ -28,6 +28,7 @@ var textGameOver;
 var textScore;
 var textScoreHigh;
 
+var buttonCounter = 0;
 var delayAddEnemy = 0;
 var hasAddTap     = false;
 var hasLoaded     = false;
@@ -41,16 +42,12 @@ var scoreHigh     = 0;
 // Adds restart button
 function addButton()
 {
+	// Clear old buttons from group
+	destroyButton();
+
+	// Add new button
 	var x = BUTTON_X * RATIO;
 	var y = BUTTON_Y * RATIO;
-
-	groupButton.forEach(
-		function(button)
-		{
-			groupButton.remove(button, true);
-		},
-		this
-	);
 
 	spriteButton = game.add.button(
 		x, y,
@@ -63,6 +60,7 @@ function addButton()
 	unsmoothSprite(spriteButton);
 	scaleButtonSprite(spriteButton);
 
+	// Add to button group
 	groupButton.add(spriteButton);
 
 	return spriteButton;
@@ -114,7 +112,7 @@ function addCloudGroup()
 }
 
 
-// Adds crest sprite
+// Adds crest sprite for UI
 function addCrest()
 {
 	drawRect(RECT_UI_X, RECT_UI_Y, RECT_UI_W, RECT_UI_H, RECT_UI_COLOR);
@@ -186,6 +184,7 @@ function addEnemy(tag)
 	var y       = RATIO * (bgY + bgBodyY);
 
 	var enemy = groupEnemy.create(x, y, tag);
+	enemy.name = tag;
 
 	unsmoothSprite(enemy)
 	scaleSprite(enemy)
@@ -356,6 +355,19 @@ function destroyBackground()
 }
 
 
+// Destroys button
+function destroyButton()
+{
+	groupButton.forEach(
+		function(button)
+		{
+			groupButton.remove(button, true);
+		},
+		this
+	);
+}
+
+
 // Destroys all current clouds
 function destroyClouds()
 {
@@ -417,8 +429,16 @@ function getMultiplier()
 // Handles reset button click events
 function handleButton()
 {
-	if (spriteButton) { spriteButton.destroy(); }
-	startGame(level);
+	if (buttonCounter === 0)
+	{
+		buttonCounter += 1;
+	}
+	else
+	{
+		if (spriteButton) { spriteButton.destroy(); }
+		buttonCounter = 0;
+		startGame(level);
+	}
 }
 
 
@@ -629,10 +649,8 @@ function updateEnemy(sprite)
 // Updates all enemy sprites
 function updateEnemies()
 {
-	if (!hasLoaded)
-	{
-		return;
-	}
+	if (!hasLoaded) { return; }
+
 	// Update all enemies
 	groupEnemy.forEach(updateEnemy, this, true);
 
@@ -646,15 +664,28 @@ function updateEnemies()
 	var randRate = _LEVEL_DATA[level]["rate"][2];
 	var randomly = randint(randMin, randMax) < randRate;
 	var isRoom   = groupEnemy.children.length < 2;
-	var isLoaded = hasLoaded;
 	var noDelay  = delayAddEnemy <= 0;
 
 	// Randomly spawn a new enemy if there's room and assets are loaded
-	if (isLoaded && isRoom && randomly && noDelay)
+	if (isRoom && randomly && noDelay)
 	{
 		var enemyKey = randomChoice(_LEVEL_DATA[level]["enemy"]);
-		addEnemy(enemyKey);
-		delayAddEnemy = DELAY_ADD_ENEMY;
+		var doAdd = true;
+		groupEnemy.forEach(
+			function(e)
+			{
+				if (e.name === enemyKey)
+				{
+					doAdd = false;
+				}
+			},
+			this
+		);
+		if (doAdd)
+		{
+			addEnemy(enemyKey);
+			delayAddEnemy = DELAY_ADD_ENEMY;
+		}
 	}
 }
 

@@ -8,7 +8,7 @@ const _ENEMY_DATA = {
 		"image": "assets/enemy/altered_demonic_beast.png"
 	},
 	"altered-golem": {
-		"body": [4, 8, 16, 21],
+		"body": [5, 11, 13, 18],
 		"image": "assets/enemy/altered_golem.png"
 	},
 	"annette-1": {
@@ -124,67 +124,67 @@ const _ENEMY_DATA = {
 		"image": "assets/enemy/edelgard_2.png"
 	},
 	"experimental-demonic-beast": {
-		"body": [8, 8, 16, 17],
+		"body": [10, 8, 11, 17],
 		"image": "assets/enemy/experimental_demonic_beast.png"
 	},
 	"felix-1": {
-		"body": [0, 0, 32, 32],
+		"body": [1, 9, 13, 11],
 		"image": "assets/enemy/felix_1.png"
 	},
 	"felix-2": {
-		"body": [0, 0, 32, 32],
+		"body": [1, 9, 13, 11],
 		"image": "assets/enemy/felix_2.png"
 	},
 	"ferdinand-1": {
-		"body": [0, 0, 32, 32],
+		"body": [1, 9, 13, 11],
 		"image": "assets/enemy/ferdinand_1.png"
 	},
 	"ferdinand-2": {
-		"body": [0, 0, 32, 32],
+		"body": [1, 9, 13, 11],
 		"image": "assets/enemy/ferdinand_2.png"
 	},
 	"flame-emperor": {
-		"body": [2, 8, 16, 16],
+		"body": [2, 12, 14, 12],
 		"image": "assets/enemy/flame_emperor.png"
 	},
 	"flayn": {
-		"body": [0, 0, 32, 32],
+		"body": [1, 9, 11, 11],
 		"image": "assets/enemy/flayn.png"
 	},
 	"flying-demonic-beast": {
-		"body": [8, 8, 16, 19],
+		"body": [10, 12, 12, 15],
 		"image": "assets/enemy/flying_demonic_beast.png"
 	},
 	"giant-bird": {
-		"body": [4, 9, 12, 19],
+		"body": [7, 10, 9, 18],
 		"image": "assets/enemy/giant_bird.png"
 	},
 	"giant-crawler": {
-		"body": [4, 8, 16, 13],
+		"body": [5, 10, 16, 11],
 		"image": "assets/enemy/giant_crawler.png"
 	},
 	"giant-demonic-beast": {
-		"body": [7, 8, 18, 21],
+		"body": [6, 10, 18, 20],
 		"image": "assets/enemy/giant_demonic_beast.png"
 	},
 	"giant-wolf": {
-		"body": [8, 8, 16, 15],
+		"body": [9, 8, 16, 15],
 		"image": "assets/enemy/giant_wolf.png"
 	},
 	"gilbert": {
-		"body": [0, 0, 32, 32],
+		"body": [1, 9, 13, 11],
 		"image": "assets/enemy/gilbert.png"
 	},
 	"golem": {
-		"body": [0, 0, 32, 32],
+		"body": [5, 10, 13, 19],
 		"image": "assets/enemy/golem.png"
 	},
 	"hanneman": {
-		"body": [0, 0, 32, 32],
+		"body": [1, 9, 14, 11],
 		"image": "assets/enemy/hanneman.png"
 	},
 	"hegemon-husk": {
-		"body": [0, 0, 32, 32],
+		"body": [9, 12, 13, 17],
 		"image": "assets/enemy/hegemon_husk.png"
 	},
 	"hilda-1": {
