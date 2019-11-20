@@ -320,7 +320,7 @@ function addTextGameOver()
 	if (textGameOver) { textGameOver.destroy(); }
 
 	// Add new text
-	var font = 'dark';
+	var font = 'light';
 	var text = 'GAME OVER';
 	var x    = TEXT_GAME_OVER_X;
 	var y    = TEXT_GAME_OVER_Y;
@@ -340,7 +340,7 @@ function addTextScore()
 	score = 0;
 
 	// Add mew text
-	var font = 'dark';
+	var font = 'light';
 	var text = padLeft(Math.round(score), 5);
 	var x    = TEXT_SCORE_X;
 	var y    = TEXT_SCORE_Y;
@@ -357,7 +357,7 @@ function addTextScoreHigh()
 	if (textScoreHigh) { textScoreHigh.destroy(); }
 
 	// Add new text
-	var font = 'light';
+	var font = 'dark';
 	var text = 'HI ' + padLeft(Math.round(scoreHigh), 5);
 	var x    = TEXT_SCORE_HIGH_X;
 	var y    = TEXT_SCORE_HIGH_Y;
@@ -790,7 +790,7 @@ function preload()
 	// Load spritesheets
 	game.load.spritesheet('byleth', 'assets/sheet.png', 32, 32);
 	game.load.spritesheet('button', 'assets/restart.png', 36, 32);
-	game.load.spritesheet('tap', 'assets/sparkle.png', 9, 9);
+	game.load.spritesheet('tap', 'assets/sparkle.png', 11, 11);
 
 	// Load images
 	game.load.image('crest', 'assets/crest.png');

@@ -21,8 +21,8 @@ const JUMP_SPEED     = 1500;
 const GRAVITY        = 4800;
 
 // User interface constants
-const CREST_X         = 74;
-const CREST_Y         = 376;
+const CREST_X         = 0;
+const CREST_Y         = 360;
 const RECT_DEAD_X     = 0;
 const RECT_DEAD_Y     = 0;
 const RECT_DEAD_W     = WIDTH;
@@ -32,7 +32,7 @@ const RECT_UI_X       = 0;
 const RECT_UI_Y       = RECT_DEAD_H;
 const RECT_UI_W       = WIDTH;
 const RECT_UI_H       = HEIGHT - RECT_UI_Y;
-const RECT_UI_COLOR   = 0xC8C8C8;
+const RECT_UI_COLOR   = 0x5A4AC0;
 const BUTTON_X        = 198;
 const BUTTON_Y        = 492;
 
@@ -55,9 +55,9 @@ const FONT_SIZE = 28;
 const TEXT_GAME_OVER_X  = 144;
 const TEXT_GAME_OVER_Y  = 642;
 const TEXT_SCORE_X      = 376;
-const TEXT_SCORE_Y      = 375;
+const TEXT_SCORE_Y      = 383;
 const TEXT_SCORE_HIGH_X = 24;
-const TEXT_SCORE_HIGH_Y = 375;
+const TEXT_SCORE_HIGH_Y = 383;
 
 // Timing constants
 const DELAY_ADD_ENEMY = 60;
