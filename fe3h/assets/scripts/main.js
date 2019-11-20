@@ -601,7 +601,7 @@ function startGame(levelKey)
 	destroyTextGameOver();
 
 	// Set background color
-	setBackgroundColor('#f3f3f3');
+	setBackgroundColor('#5a4d3a');
 
 	// Reset "dead" flag
 	setDead(false);
@@ -874,7 +874,7 @@ function render()
 {
 	try
 	{
-		///*
+		/*
 		game.debug.body(spriteBackground);
 		game.debug.body(spritePlayer);
 		groupEnemy.children.forEach(function (e) { game.debug.body(e); }, this);
