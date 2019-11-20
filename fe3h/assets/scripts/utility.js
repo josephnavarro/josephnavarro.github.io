@@ -75,7 +75,7 @@ function drawRect(x, y, w, h, color)
 	graphics.beginFill(color);
 	graphics.drawRect(x, y, w, h);
 	graphics.endFill();
-	
+
 	return graphics;
 }
 

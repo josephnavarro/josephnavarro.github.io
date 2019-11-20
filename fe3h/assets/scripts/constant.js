@@ -64,3 +64,5 @@ const DELAY_ADD_ENEMY = 60;
 
 // Emitter constants
 const EMITTER_NUM_PARTICLES = 15;
+const EMITTER_EXPLODE_COUNT = 12;
+const EMITTER_EXPLODE_TIME  = 500;

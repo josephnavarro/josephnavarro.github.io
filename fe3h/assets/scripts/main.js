@@ -488,26 +488,15 @@ function handlePlayerEnemy(player, enemy)
 	if (player.body.touching.right || player.body.touching.down)
 	{
 		// Stop all enemies
-		groupEnemy.forEach(
-			function(e)
-			{
-				e.body.stopMovement();
-				e.body.velocity.x = 0;
-				e.body.velocity.y = 0;
-				e.tint = 0x000000;
-			}
-		)
+		stopEnemies();
 
 		// Stop player
-		player.body.velocity.x = 0;
-		player.body.velocity.y = 0;
-		player.body.gravity.y = 0;
-		player.tint = 0x000000;
+		stopPlayers();
 
 		// Player is now dead
 		playAnimation(player, 'pose', false, 0);
 		setDead(true);
-		addGraphicsDead();
+		playEffectDead();
 
 		// Spawn reset button and game over text
 		addButton();
@@ -528,7 +517,7 @@ function handleTap(pointer)
 {
 	spriteEmitterTap.x = pointer.x;
 	spriteEmitterTap.y = pointer.y;
-	spriteEmitterTap.explode(500, 6);
+	spriteEmitterTap.explode(EMITTER_EXPLODE_TIME, EMITTER_EXPLODE_COUNT);
 
 	var sx = RATIO * SPRITE_SCALE;
 	var sy = RATIO * SPRITE_SCALE;
@@ -567,6 +556,15 @@ function loadAssets()
 function loadComplete()
 {
 	hasLoaded = true;
+}
+
+
+// Plays a "dead" graphical effect
+function playEffectDead()
+{
+	groupEnemy.forEach(function(e) { e.tint = 0x000000; } );
+	groupPlayer.forEach(function(e) {e.tint = 0x000000; } );
+	addGraphicsDead();
 }
 
 
@@ -622,6 +620,34 @@ function startGame(levelKey)
 
 	// Add score text
 	addTextScore();
+}
+
+
+// Stops all enemies from moving
+function stopEnemies()
+{
+	groupEnemy.forEach(
+		function(e)
+		{
+			e.body.stopMovement();
+			e.body.velocity.x = 0;
+			e.body.velocity.y = 0;
+		}
+	)
+}
+
+
+// Stops all players from moving
+function stopPlayers()
+{
+	groupPlayer.forEach(
+		function(p)
+		{
+			p.body.velocity.x = 0;
+			p.body.velocity.y = 0;
+			p.body.gravity.y = 0;
+		}
+	)
 }
 
 
@@ -848,7 +874,7 @@ function render()
 {
 	try
 	{
-		/*
+		///*
 		game.debug.body(spriteBackground);
 		game.debug.body(spritePlayer);
 		groupEnemy.children.forEach(function (e) { game.debug.body(e); }, this);

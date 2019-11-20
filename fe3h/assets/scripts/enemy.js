@@ -284,11 +284,11 @@ const _ENEMY_DATA = {
 		"image": "assets/enemy/mercedes_2.png"
 	},
 	"petra-1": {
-		"body": [0, 0, 32, 32],
+		"body": [1, 9, 10, 11],
 		"image": "assets/enemy/petra_1.png"
 	},
 	"petra-2": {
-		"body": [0, 0, 32, 32],
+		"body": [1, 9, 10, 11],
 		"image": "assets/enemy/petra_2.png"
 	},
 	"raphael-1": {
