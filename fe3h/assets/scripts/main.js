@@ -34,7 +34,7 @@ var textGameOver;
 var textScore;
 var textScoreHigh;
 
-var buttonCounter = 0;
+var buttonDelay   = 0;
 var delayAddEnemy = 0;
 var hasAddTap     = false;
 var hasLoaded     = false;
@@ -501,13 +501,9 @@ function getMultiplier()
 // Handles reset button click events
 function handleButton()
 {
-	if (score < 500) { buttonCounter = 1; }
-
-	if (buttonCounter === 0) { buttonCounter += 1; }
-	else
+	if (buttonDelay === 0)
 	{
 		if (spriteButton) { spriteButton.destroy(); }
-		buttonCounter = 0;
 		startGame(level);
 	}
 }
@@ -539,6 +535,7 @@ function handlePlayerEnemy(player, enemy)
 		playAnimation(player, 'pose', false, 0);
 		setDead(true);
 		playEffectDead();
+		setButtonDelay(BUTTON_DELAY);
 
 		// Spawn reset button and game over text
 		addButton();
@@ -607,6 +604,15 @@ function playEffectDead()
 	groupEnemy.forEach(function(e) { e.tint = 0x000000; } );
 	groupPlayer.forEach(function(e) {e.tint = 0x000000; } );
 	addGraphicsDead();
+}
+
+
+/**
+ *  Sets button feedback delay timer.
+ */
+function setButtonDelay(delay)
+{
+	buttonDelay = delay;
 }
 
 
@@ -702,7 +708,28 @@ function stopPlayers()
 }
 
 
-// Updates scrolling background
+/**
+ *  Updates button feedback delay timer.
+ */
+function updateButtonDelay()
+{
+	if (isDead && buttonDelay !== 0)
+	{
+		if (buttonDelay > 0)
+		{
+			buttonDelay -= 1;
+		}
+		if (buttonDelay < 0)
+		{
+			buttonDelay = 0;
+		}
+	}
+}
+
+
+/**
+ *  Updates scrolling background
+ */
 function updateSpriteBackground()
 {
 	if (!isDead)
@@ -713,7 +740,9 @@ function updateSpriteBackground()
 }
 
 
-// Updates a single cloud sprite
+/**
+ *  Updates a single cloud sprite
+ */
 function updateSpriteCloud(sprite)
 {
 	try
@@ -732,14 +761,18 @@ function updateSpriteCloud(sprite)
 }
 
 
-// Updates all cloud sprites
+/**
+ *  Updates all cloud sprites
+ */
 function updateGroupClouds()
 {
 	if (!isDead) { groupClouds.forEach(updateSpriteCloud, this, true); }
 }
 
 
-// Updates a single enemy sprite
+/**
+ *  Updates a single enemy sprite
+ */
 function updateEnemy(sprite)
 {
 	try
@@ -758,7 +791,9 @@ function updateEnemy(sprite)
 }
 
 
-// Updates all enemy sprites
+/**
+ *  Updates all enemy sprites
+ */
 function updateGroupEnemies()
 {
 	if (hasLoaded)
@@ -797,7 +832,9 @@ function updateGroupEnemies()
 }
 
 
-// Updates player-to-ground collisions
+/**
+ *  Updates player-to-ground collisions
+ */
 function updateCollisionPlayerEnemy()
 {
 	game.physics.arcade.collide(
@@ -810,7 +847,9 @@ function updateCollisionPlayerEnemy()
 }
 
 
-// Updates player-to-ground collisions
+/**
+ *  Updates player-to-ground collisions.
+ */
 function updateCollisionPlayerGround()
 {
 	game.physics.arcade.collide(
@@ -823,7 +862,9 @@ function updateCollisionPlayerGround()
 }
 
 
-// Updates score
+/**
+ *  Updates score.
+ */
 function updateScore()
 {
 	if (!isDead)
@@ -835,7 +876,9 @@ function updateScore()
 }
 
 
-// Updates high score
+/**
+ *  Updates high score.
+ */
 function updateScoreHigh()
 {
 	if (!isDead && score > scoreHigh)
@@ -848,7 +891,9 @@ function updateScoreHigh()
 }
 
 
-// Preload callback
+/**
+ *  Preload callback
+ */
 function preload()
 {
 	// Load bitmap fonts
@@ -885,7 +930,9 @@ function preload()
 }
 
 
-// Create callback
+/**
+ *  Create callback
+ */
 function create()
 {
 	// Add crest sprite
@@ -924,7 +971,9 @@ function create()
 }
 
 
-// Render callback
+/**
+ *  Render callback
+ */
 function render()
 {
 	try
@@ -939,7 +988,9 @@ function render()
 }
 
 
-// Update callback
+/**
+ *  Update callback
+ */
 function update()
 {
     updateSpriteBackground();
@@ -949,4 +1000,5 @@ function update()
 	updateCollisionPlayerEnemy();
 	updateScore();
 	updateScoreHigh();
+	updateButtonDelay();
 }

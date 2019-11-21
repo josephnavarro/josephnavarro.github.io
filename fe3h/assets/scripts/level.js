@@ -45,7 +45,7 @@ const _LEVEL_DATA = {
 			//"edelgard-2",
 			//"felix-1",
 			//"felix-2",
-			//"ferdinand-1",
+			"ferdinand-1",
 			//"ferdinand-2",
 			//"flayn",
 			//"gilbert",

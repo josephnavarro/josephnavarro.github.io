@@ -1,69 +1,81 @@
-// Adds bitmap text instance
+/**
+ *  Adds an instance of non-antialiased bitmap text.
+ */
 function addBitmapText(font, text, x, y, size)
 {
-	x *= RATIO;
-	y *= RATIO;
-	size *= RATIO;
+	x    = RATIO * x;
+	y    = RATIO * y;
+	size = RATIO * size;
 
 	var text = game.add.bitmapText(x, y, font, text, size);
 	unsmoothSprite(text);
+
 	return text;
 }
 
 
-// Adds gravity to a sprite
+/**
+ *  Adds a gravity attribute to a sprite.
+ */
 function addGravity(sprite, gravity=GRAVITY)
 {
-	gravity *= RATIO;
+	gravity = RATIO * gravity;
 	sprite.body.gravity.y = gravity;
 
 	return sprite;
 }
 
 
-// Adds physical attributes to a sprite
+/**
+ *  Adds physical attributes to a sprite
+ */
 function addPhysics(sprite, w=0, h=0, dx=0, dy=0, immovable=false)
 {
 	game.physics.enable(sprite, Phaser.Physics.ARCADE);
 
 	if (!w) { w = sprite.width; }
 	if (!h) { h = sprite.height; }
+	if (immovable) { sprite.body.immovable = true; }
 
 	sprite.body.setSize(w, h, dx, dy);
-
-	if (immovable) { sprite.body.immovable = true; }
 
 	return sprite;
 }
 
 
-// Adds a sprite using the given spritesheet tag
+/**
+ *  Adds a sprite using the given image tag.
+ */
 function addSprite(x, y, tag)
 {
-	x *= RATIO;
-	y *= RATIO;
+	x = RATIO * x;
+	y = RATIO * y;
 
 	return game.add.sprite(x, y, tag);
 }
 
 
-// Adds a tiled sprite using the given image tag and dimensions
+/**
+ *  Adds a tiled sprite using the given image tag and dimensions.
+ */
 function addTiledSprite(x, y, w, h, tag)
 {
-	x *= RATIO;
-	y *= RATIO;
-	w *= RATIO;
-	h *= RATIO;
+	x = RATIO * x;
+	y = RATIO * y;
+	w = RATIO * w;
+	h = RATIO * h;
 
-	var tileSprite = game.add.tileSprite(x, y, w, h, tag);
-	unsmoothSprite(tileSprite);
-	scaleTileSprite(tileSprite);
+	var sprite = game.add.tileSprite(x, y, w, h, tag);
+	unsmoothSprite(sprite);
+	scaleTileSprite(sprite);
 
-	return tileSprite;
+	return sprite;
 }
 
 
-// Draws a colored rectangle
+/**
+ *  Draws a colored rectangle.
+ */
 function drawRect(x, y, w, h, color)
 {
 	x *= RATIO;
@@ -134,7 +146,7 @@ function scaleButtonSprite(sprite)
 }
 
 
-// Rescales a sprite to standard dimensions
+// Rescales a sprite to standard dimensions.
 function scaleSprite(sprite)
 {
 	var sx = RATIO * SPRITE_SCALE;
@@ -146,7 +158,9 @@ function scaleSprite(sprite)
 }
 
 
-// Rescales a tile sprite to standard dimensions
+/**
+ *  Rescales a tiled sprite to standard dimensions.
+ */
 function scaleTileSprite(sprite)
 {
 	var sx = RATIO * SPRITE_SCALE;
@@ -158,21 +172,27 @@ function scaleTileSprite(sprite)
 }
 
 
-// Set background color
+/**
+ *  Sets game's background color
+ */
 function setBackgroundColor(color)
 {
 	game.stage.backgroundColor = color;
 }
 
 
-// Sets sprite tint
+/**
+ *  Sets sprite tint color.
+ */
 function setTint(sprite, tint)
 {
 	sprite.tint = tint;
 }
 
 
-// Disables antialiasing on a sprite
+/**
+ *  Disables antialiasing on a sprite.
+ */
 function unsmoothSprite(sprite)
 {
 	sprite.smoothed = false;
