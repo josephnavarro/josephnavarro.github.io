@@ -21,7 +21,11 @@ var groupClouds;
 var groupDead;
 var groupEmitter;
 var groupEnemy;
+var groupOverlay;
 var groupPlayer;
+var groupText;
+var overlayLower;
+var overlayUpper;
 var spriteBackground;
 var spriteButton;
 var spriteEmitterTap;
@@ -69,6 +73,39 @@ function addButton()
 }
 
 
+// Adds the tap particle emitter effect
+function addEmitterTap()
+{
+	// Destroy old tap emitter
+	destroyEmitterTap();
+
+	// Add emitter and make particles
+	spriteEmitterTap = game.add.emitter(0, 0, EMITTER_NUM_PARTICLES);
+	spriteEmitterTap.makeParticles('tap', [0, 1, 2]);
+	spriteEmitterTap.setAlpha(0.3, 0.8);
+
+	// Scale up emitter
+	var scale = RATIO * SPRITE_SCALE;
+	spriteEmitterTap.setScale(scale, scale, scale, scale);
+
+	// Normalize particle speeds
+	var speed = RATIO * PARTICLE_SPEED;
+	spriteEmitterTap.minParticleSpeed.x = -speed;
+	spriteEmitterTap.minParticleSpeed.y = -speed;
+	spriteEmitterTap.maxParticleSpeed.x = speed;
+	spriteEmitterTap.maxParticleSpeed.y = speed;
+
+	// Add emitter callback event only once
+	if (!hasAddTap)
+	{
+		hasAddTap = true;
+		game.input.onDown.add(handleTap, this);
+	}
+
+	groupEmitter.add(spriteEmitterTap);
+}
+
+
 // Adds "dead" colored graphic
 function addGraphicsDead()
 {
@@ -102,6 +139,15 @@ function addGroupBackground()
 }
 
 
+// Adds cloud group
+function addGroupCloud()
+{
+	if (groupClouds) { groupClouds.destroy(); }
+	groupClouds = game.add.group();
+	return groupClouds;
+}
+
+
 // Adds "dead" colored graphics group
 function addGroupDead()
 {
@@ -111,8 +157,77 @@ function addGroupDead()
 }
 
 
+// Adds tap emitter sprite group
+function addGroupEmitter()
+{
+	if (groupEmitter) { groupEmitter.destroy(); }
+	groupEmitter = game.add.group();
+	return groupEmitter;
+}
+
+
+// Adds enemy group
+function addGroupEnemy()
+{
+	if (groupEnemy) { groupEnemy.destroy(); }
+	groupEnemy = game.add.group();
+	return groupEnemy;
+}
+
+
+// Adds overlay group
+function addGroupOverlay()
+{
+	if (groupOverlay) { groupOverlay.destroy(); }
+	groupOverlay = game.add.group();
+	return groupOverlay;
+}
+
+
+// Adds player sprite group
+function addGroupPlayer()
+{
+	if (groupPlayer) { groupPlayer.destroy(); }
+	groupPlayer = game.add.group();
+	return groupPlayer;
+}
+
+
+// Adds text group
+function addGroupText()
+{
+	if (groupText) { groupText.destroy(); }
+	groupText = game.add.group();
+	return groupText;
+}
+
+
+// Adds lower overlay
+function addOverlayLower()
+{
+	if (overlayLower) { groupOverlay.remove(overlayLower, true); }
+	overlayLower = groupOverlay.create(
+		OVERLAY_LOWER_X,
+		OVERLAY_LOWER_Y,
+		'overlay-lower'
+	);
+}
+
+
+// Adds upper overlay
+function addOverlayUpper()
+{
+	if (overlayUpper) { groupOverlay.remove(overlayUpper, true); }
+	overlayUpper = groupOverlay.create(
+		OVERLAY_UPPER_X,
+		OVERLAY_UPPER_Y,
+		'overlay-upper'
+	);
+}
+
+
 // Creates a cloud sprite
-function addCloud()
+function addSpriteCloud()
 {
 	// Clean up all clouds
 	destroyClouds();
@@ -129,15 +244,6 @@ function addCloud()
 }
 
 
-// Adds cloud group
-function addGroupCloud()
-{
-	if (groupClouds) { groupClouds.destroy(); }
-	groupClouds = game.add.group();
-	return groupClouds;
-}
-
-
 // Adds crest sprite for UI
 function addSpriteCrest()
 {
@@ -148,55 +254,8 @@ function addSpriteCrest()
 }
 
 
-// Adds tap emitter sprite group
-function addGroupEmitter()
-{
-	if (groupEmitter) { groupEmitter.destroy(); }
-	groupEmitter = game.add.group();
-	return groupEmitter;
-}
-
-
-// Adds tap emitter
-function addEmitterTap()
-{
-	// Destroy old tap emitter
-	destroyEmitterTap();
-
-	// Add emitter and make particles
-	var numParticles = EMITTER_NUM_PARTICLES;
-	spriteEmitterTap = game.add.emitter(0, 0, numParticles);
-	spriteEmitterTap.makeParticles('tap', [0, 1, 2]);
-	spriteEmitterTap.setAlpha(0.3, 0.8);
-
-	// Scale up emitter
-	var scale = RATIO * SPRITE_SCALE;
-	var sx1 = scale;
-	var sx2 = scale;
-	var sy1 = scale;
-	var sy2 = scale;
-	spriteEmitterTap.setScale(sx1, sx2, sy1, sy2);
-
-	// Normalize particle speeds
-	var speed = RATIO * PARTICLE_SPEED;
-	spriteEmitterTap.minParticleSpeed.x = -speed;
-	spriteEmitterTap.minParticleSpeed.y = -speed;
-	spriteEmitterTap.maxParticleSpeed.x = speed;
-	spriteEmitterTap.maxParticleSpeed.y = speed;
-
-	// Add emit event only once
-	if (!hasAddTap)
-	{
-		hasAddTap = true;
-		game.input.onDown.add(handleTap, this);
-	}
-
-	groupEmitter.add(spriteEmitterTap);
-}
-
-
 // Creates a new enemy
-function addEnemy(tag)
+function addSpriteEnemy(tag)
 {
 	// Create new enemy
 	var bg      = getBackground();
@@ -218,46 +277,6 @@ function addEnemy(tag)
 	enemy.anchor.setTo(0, 1);
 
 	return enemy;
-}
-
-
-// Adds enemy group
-function addGroupEnemy()
-{
-	if (groupEnemy) { groupEnemy.destroy(); }
-	groupEnemy = game.add.group();
-	return groupEnemy;
-}
-
-
-// Adds user input handlers
-function addInput()
-{
-	game.input.onDown.add( function(p) { handleJump(spritePlayer); }, this);
-}
-
-
-// Adds player animations
-function addPlayerAnimations(sprite)
-{
-	// Add animations for Byleth
-	var fps = SPRITE_FRAMERATE;
-
-	sprite.animations.add('idle', [0, 1, 2, 1], fps, true);
-	sprite.animations.add('jump', [6, 7, 8, 9, 10], fps, false);
-	sprite.animations.add('pose', [12], 0.01, false);
-	sprite.animations.add('run', [18, 19, 20, 21], fps, true);
-
-	return sprite;
-}
-
-
-// Adds player sprite group
-function addGroupPlayer()
-{
-	if (groupPlayer) { groupPlayer.destroy(); }
-	groupPlayer = game.add.group();
-	return groupPlayer;
 }
 
 
@@ -284,6 +303,28 @@ function addSpritePlayer(x, y)
 	groupPlayer.add(spritePlayer);
 
 	return spritePlayer;
+}
+
+
+// Adds user input handlers
+function addInput()
+{
+	game.input.onDown.add( function(p) { handleJump(spritePlayer); }, this);
+}
+
+
+// Adds player animations
+function addPlayerAnimations(sprite)
+{
+	// Add animations for Byleth
+	var fps = SPRITE_FRAMERATE;
+
+	sprite.animations.add('idle', [0, 1, 2, 1], fps, true);
+	sprite.animations.add('jump', [6, 7, 8, 9, 10], fps, false);
+	sprite.animations.add('pose', [12], 0.01, false);
+	sprite.animations.add('run', [18, 19, 20, 21], fps, true);
+
+	return sprite;
 }
 
 
@@ -317,7 +358,7 @@ function addTiledSpriteBackground()
 function addTextGameOver()
 {
 	// Destroy old text (if any)
-	if (textGameOver) { textGameOver.destroy(); }
+	if (textGameOver) { groupText.remove(textGameOver, true); }
 
 	// Add new text
 	var font = 'light';
@@ -327,6 +368,7 @@ function addTextGameOver()
 	var size = FONT_SIZE;
 
 	textGameOver = addBitmapText(font, text, x, y, size);
+	groupText.add(textGameOver);
 }
 
 
@@ -334,7 +376,7 @@ function addTextGameOver()
 function addTextScore()
 {
 	// Destroy old text (if any)
-	if (textScore) { textScore.destroy(); }
+	if (textScore) { groupText.remove(textScore, true); }
 
 	// Reset score
 	score = 0;
@@ -347,6 +389,7 @@ function addTextScore()
 	var size = FONT_SIZE;
 
 	textScore = addBitmapText(font, text, x, y, size);
+	groupText.add(textScore);
 }
 
 
@@ -354,7 +397,7 @@ function addTextScore()
 function addTextScoreHigh()
 {
 	// Destroy old text (if any)
-	if (textScoreHigh) { textScoreHigh.destroy(); }
+	if (textScoreHigh) { groupText.remove(textScoreHigh, true); }
 
 	// Add new text
 	var font = 'dark';
@@ -364,6 +407,7 @@ function addTextScoreHigh()
 	var size = FONT_SIZE;
 
 	textScoreHigh = addBitmapText(font, text, x, y, size);
+	groupText.add(textScoreHigh);
 }
 
 
@@ -601,7 +645,7 @@ function startGame(levelKey)
 	destroyTextGameOver();
 
 	// Set background color
-	setBackgroundColor('#5a4d3a');
+	setBackgroundColor('#2167a5');
 
 	// Reset "dead" flag
 	setDead(false);
@@ -613,13 +657,22 @@ function startGame(levelKey)
 	playAnimation(addSpritePlayer(PLAYER_X, PLAYER_Y), 'jump', false, 1);
 
 	// Add a lone cloud
-	addCloud();
+	addSpriteCloud();
 
 	// Add high score text
 	addTextScoreHigh();
 
 	// Add score text
 	addTextScore();
+
+	// Add overlay effects
+	addGroupOverlay();
+	addOverlayLower();
+	addOverlayUpper();
+
+	// Add tap emitter
+	addGroupEmitter();
+	addEmitterTap();
 }
 
 
@@ -652,7 +705,7 @@ function stopPlayers()
 
 
 // Updates scrolling background
-function updateBackground()
+function updateSpriteBackground()
 {
 	if (!isDead)
 	{
@@ -663,7 +716,7 @@ function updateBackground()
 
 
 // Updates a single cloud sprite
-function updateCloud(sprite)
+function updateSpriteCloud(sprite)
 {
 	try
 	{
@@ -674,7 +727,7 @@ function updateCloud(sprite)
 		if (sprite.x <= check)
 		{
 			groupClouds.remove(sprite, true);
-			addCloud();
+			addSpriteCloud();
 		}
 	}
 	catch (e) {}
@@ -682,9 +735,9 @@ function updateCloud(sprite)
 
 
 // Updates all cloud sprites
-function updateClouds()
+function updateGroupClouds()
 {
-	if (!isDead) { groupClouds.forEach(updateCloud, this, true); }
+	if (!isDead) { groupClouds.forEach(updateSpriteCloud, this, true); }
 }
 
 
@@ -708,7 +761,7 @@ function updateEnemy(sprite)
 
 
 // Updates all enemy sprites
-function updateEnemies()
+function updateGroupEnemies()
 {
 	if (hasLoaded)
 	{
@@ -738,7 +791,7 @@ function updateEnemies()
 			);
 			if (doAdd)
 			{
-				addEnemy(enemyKey);
+				addSpriteEnemy(enemyKey);
 				delayAddEnemy = DELAY_ADD_ENEMY;
 			}
 		}
@@ -747,7 +800,7 @@ function updateEnemies()
 
 
 // Updates player-to-ground collisions
-function updatePlayerEnemy()
+function updateCollisionPlayerEnemy()
 {
 	game.physics.arcade.collide(
 		spritePlayer,
@@ -760,7 +813,7 @@ function updatePlayerEnemy()
 
 
 // Updates player-to-ground collisions
-function updatePlayerGround()
+function updateCollisionPlayerGround()
 {
 	game.physics.arcade.collide(
 		spritePlayer,
@@ -821,6 +874,8 @@ function preload()
 	// Load images
 	game.load.image('crest', 'assets/crest.png');
 	game.load.image('cloud', 'assets/cloud.png');
+	game.load.image('overlay-upper', 'assets/upper.png');
+	game.load.image('overlay-lower', 'assets/lower.png');
 
 	// Load all images defined under background data
 	for (const entry of Object.entries(_BG_DATA))
@@ -856,16 +911,18 @@ function create()
 	// Add player group
 	addGroupPlayer();
 
+	// Add text group
+	addGroupText();
+
+	// Add overlay group
+	addGroupOverlay();
+
 	// Starts game
 	var levelKey = 'basic';
 	startGame(levelKey);
 
 	// Process jump on input down
 	addInput();
-
-	// Add tap emitter
-	addGroupEmitter();
-	addEmitterTap();
 }
 
 
@@ -887,11 +944,11 @@ function render()
 // Update callback
 function update()
 {
-    updateBackground();
-	updateClouds();
-	updateEnemies();
-	updatePlayerGround();
-	updatePlayerEnemy();
+    updateSpriteBackground();
+	updateGroupClouds();
+	updateGroupEnemies();
+	updateCollisionPlayerGround();
+	updateCollisionPlayerEnemy();
 	updateScore();
 	updateScoreHigh();
 }

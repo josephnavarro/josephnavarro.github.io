@@ -12,6 +12,12 @@ const SCORE_MULTIPLIER = 500;
 const SPRITE_FRAMERATE = 8;
 const SPRITE_SCALE     = 4;
 
+// Overlay constants
+const OVERLAY_LOWER_X = 0;
+const OVERLAY_LOWER_Y = 360;
+const OVERLAY_UPPER_X = 0;
+const OVERLAY_UPPER_Y = 0;
+
 // Speed constants
 const PARTICLE_SPEED = 200;
 const SCROLL_SPEED   = 1;
@@ -54,10 +60,10 @@ const FONT_SIZE = 28;
 // Text constants
 const TEXT_GAME_OVER_X  = 144;
 const TEXT_GAME_OVER_Y  = 642;
-const TEXT_SCORE_X      = 376;
-const TEXT_SCORE_Y      = 383;
-const TEXT_SCORE_HIGH_X = 24;
-const TEXT_SCORE_HIGH_Y = 383;
+const TEXT_SCORE_X      = 360;
+const TEXT_SCORE_Y      = 399;
+const TEXT_SCORE_HIGH_X = 40;
+const TEXT_SCORE_HIGH_Y = 399;
 
 // Timing constants
 const DELAY_ADD_ENEMY = 60;
