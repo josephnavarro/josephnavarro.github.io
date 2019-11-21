@@ -208,7 +208,7 @@ function addOverlayLower()
 	if (overlayLower) { groupOverlay.remove(overlayLower, true); }
 	overlayLower = addSprite(OVERLAY_LOWER_X, OVERLAY_LOWER_Y, 'overlay-lower');
 	overlayLower.scale.setTo(RATIO, RATIO);
-	overlayLower.alpha = 0.5;
+	overlayLower.alpha = OVERLAY_LOWER_ALPHA;
 	groupOverlay.add(overlayLower);
 }
 
@@ -219,7 +219,7 @@ function addOverlayUpper()
 	if (overlayUpper) { groupOverlay.remove(overlayUpper, true); }
 	overlayUpper = addSprite(OVERLAY_UPPER_X, OVERLAY_UPPER_Y, 'overlay-upper');
 	overlayUpper.scale.setTo(RATIO, RATIO);
-	overlayUpper.alpha = 0.5;
+	overlayUpper.alpha = OVERLAY_UPPER_ALPHA;
 	groupOverlay.add(overlayUpper);
 }
 

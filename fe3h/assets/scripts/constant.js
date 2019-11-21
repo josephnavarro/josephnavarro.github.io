@@ -13,10 +13,12 @@ const SPRITE_FRAMERATE = 8;
 const SPRITE_SCALE     = 4;
 
 // Overlay constants
-const OVERLAY_LOWER_X = 0;
-const OVERLAY_LOWER_Y = 360;
-const OVERLAY_UPPER_X = 0;
-const OVERLAY_UPPER_Y = 0;
+const OVERLAY_LOWER_X     = 0;
+const OVERLAY_LOWER_Y     = 360;
+const OVERLAY_LOWER_ALPHA = 0.5;
+const OVERLAY_UPPER_X     = 0;
+const OVERLAY_UPPER_Y     = 0;
+const OVERLAY_UPPER_ALPHA = 0.25;
 
 // Speed constants
 const PARTICLE_SPEED = 200;
