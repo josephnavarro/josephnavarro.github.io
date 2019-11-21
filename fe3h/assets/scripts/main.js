@@ -208,6 +208,7 @@ function addOverlayLower()
 	if (overlayLower) { groupOverlay.remove(overlayLower, true); }
 	overlayLower = addSprite(OVERLAY_LOWER_X, OVERLAY_LOWER_Y, 'overlay-lower');
 	overlayLower.scale.setTo(RATIO, RATIO);
+	overlayLower.alpha = 0.5;
 	groupOverlay.add(overlayLower);
 }
 
@@ -218,6 +219,7 @@ function addOverlayUpper()
 	if (overlayUpper) { groupOverlay.remove(overlayUpper, true); }
 	overlayUpper = addSprite(OVERLAY_UPPER_X, OVERLAY_UPPER_Y, 'overlay-upper');
 	overlayUpper.scale.setTo(RATIO, RATIO);
+	overlayUpper.alpha = 0.5;
 	groupOverlay.add(overlayUpper);
 }
 
@@ -770,7 +772,7 @@ function updateGroupEnemies()
 		var randMax  = _LEVEL_DATA[level]['rate'][1];
 		var randRate = _LEVEL_DATA[level]['rate'][2];
 		var randomly = randint(randMin, randMax) < randRate;
-		var isRoom   = groupEnemy.children.length < 2;
+		var isRoom   = groupEnemy.children.length < 3;
 		var noDelay  = delayAddEnemy <= 0;
 
 		// Randomly spawn a new enemy if there's room and delay is inactive
