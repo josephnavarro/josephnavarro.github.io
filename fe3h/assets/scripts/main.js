@@ -211,6 +211,7 @@ function addOverlayLower()
 		OVERLAY_LOWER_Y,
 		'overlay-lower'
 	);
+	overlayLower.scale.setTo(RATIO, RATIO);
 }
 
 
@@ -223,6 +224,7 @@ function addOverlayUpper()
 		OVERLAY_UPPER_Y,
 		'overlay-upper'
 	);
+	overlayUpper.scale.setTo(RATIO, RATIO);
 }
 
 
