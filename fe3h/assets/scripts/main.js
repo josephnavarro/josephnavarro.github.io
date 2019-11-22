@@ -231,7 +231,7 @@ function addSpriteCloud()
 	destroyClouds();
 
 	// Create new cloud
-	var x     = game.world.width;
+	var x     = RATIO * game.world.width;
 	var y     = randint(MIN_CLOUD_Y, MAX_CLOUD_Y);
 	var cloud = groupClouds.create(x, y, 'cloud');
 
@@ -336,7 +336,7 @@ function addTiledSpriteBackground()
 	var bg    = getBackground();
 	var x     = _BG_DATA[bg]['x'];
 	var y     = _BG_DATA[bg]['y'];
-	var w     = game.world.width;
+	var w     = RATIO * game.world.width;
 	var h     = SPRITE_SCALE * _BG_DATA[bg]['h'];
 	var bodyH = RATIO * SPRITE_SCALE * _BG_DATA[bg]['body-h'];
 	var dx    = RATIO * _BG_DATA[bg]['body-x'];
@@ -433,20 +433,21 @@ function destroyButton()
 }
 
 
-// Destroys all current clouds
+/**
+ *  Destroys all current clouds.
+ */
 function destroyClouds()
 {
 	groupClouds.forEach(
-		function(cloud)
-		{
-			groupClouds.remove(cloud, true);
-		},
+		function(cloud) { groupClouds.remove(cloud, true); },
 		this
 	);
 }
 
 
-// Destroys tap emitter
+/**
+ *  Destroys tap emitter.
+ */
 function destroyEmitterTap()
 {
 	if (spriteEmitterTap)
@@ -470,7 +471,9 @@ function destroyPlayer()
 }
 
 
-// Destroys "dead" colored graphic
+/**
+ *  Destroys "dead" colored graphic.
+ */
 function destroyGraphicsDead()
 {
 	if (graphicsDead) { graphicsDead.kill(); }
@@ -484,10 +487,30 @@ function destroyTextGameOver()
 }
 
 
-// Returns current background key
+/**
+ *  Returns current background key.
+ */
 function getBackground()
 {
 	return _LEVEL_DATA[level]['background'];
+}
+
+
+/**
+ *  Returns enemy sprite data.
+ */
+function getEnemySprite(enemy)
+{
+	return _ENEMY_DATA[enemy]['image'];
+}
+
+
+/**
+ *  Returns current level's enemy data.
+ */
+function getLevelEnemies(level)
+{
+	return _LEVEL_DATA[level]['enemy'];
 }
 
 
@@ -498,7 +521,9 @@ function getMultiplier()
 }
 
 
-// Handles reset button click events
+/**
+ *  Handles reset button click events.
+ */
 function handleButton()
 {
 	if (buttonDelay === 0)
@@ -509,7 +534,9 @@ function handleButton()
 }
 
 
-// Handles arbitrary jump events
+/**
+ *  Handles arbitrary jump events.
+ */
 function handleJump(sprite)
 {
 	if (!isDead && sprite.body.touching.down)
@@ -520,7 +547,9 @@ function handleJump(sprite)
 }
 
 
-// Handles player-to-ground collisions
+/**
+ *  Handles player-to-ground collisions.
+ */
 function handlePlayerEnemy(player, enemy)
 {
 	if (player.body.touching.right || player.body.touching.down)
@@ -544,61 +573,73 @@ function handlePlayerEnemy(player, enemy)
 }
 
 
-// Handles player-to-ground collisions
+/**
+ *  Handles player-to-ground collisions.
+ */
 function handlePlayerGround(player, ground)
 {
 	if (!isDead) { playAnimation(player, 'run'); }
 }
 
 
-// Handles a tap burst
+/**
+ *  Handles a tap burst.
+ */
 function handleTap(pointer)
 {
 	spriteEmitterTap.x = pointer.x;
 	spriteEmitterTap.y = pointer.y;
 	spriteEmitterTap.explode(EMITTER_EXPLODE_TIME, EMITTER_EXPLODE_COUNT);
 
-	var sx = RATIO * SPRITE_SCALE;
-	var sy = RATIO * SPRITE_SCALE;
-
 	// Scale up and de-antialias particles
 	spriteEmitterTap.children.forEach(
         function(tap)
         {
 			unsmoothSprite(tap);
-            tap.scale.setTo(sx, sy);
+            scaleSprite(tap);
+			game.add.tween(tap).to(
+				{
+					alpha: 0
+				},
+				EMITTER_EXPLODE_TIME,
+				Phaser.Easing.Linear.Out,
+				true
+			)
         }
     );
 }
 
 
-// Dynamically loads assets during runtime
+/**
+ *  Dynamically loads assets during runtime.
+ */
 function loadAssets()
 {
 	hasLoaded = false;
 	game.load.onLoadComplete.add(loadComplete, this);
 
 	// Load enemies defined for this level
-	var enemyData = _LEVEL_DATA[level]["enemy"];
-	for (const entry of enemyData)
+	for (const enemy of getLevelEnemies(level))
 	{
-		var key = entry;
-		var image = _ENEMY_DATA[key]["image"];
-		game.load.image(key, image);
+		game.load.image(enemy, getEnemySprite(enemy));
 	}
 
 	game.load.start();
 }
 
 
-// Load completion callback
+/**
+ *  Load completion callback function.
+ */
 function loadComplete()
 {
 	hasLoaded = true;
 }
 
 
-// Plays a "dead" graphical effect
+/**
+ *  Plays the "dead" graphical effect.
+ */
 function playEffectDead()
 {
 	groupEnemy.forEach(function(e) { e.tint = 0x000000; } );
@@ -608,7 +649,7 @@ function playEffectDead()
 
 
 /**
- *  Sets button feedback delay timer.
+ *  Sets the global button feedback delay timer.
  */
 function setButtonDelay(delay)
 {
@@ -616,93 +657,81 @@ function setButtonDelay(delay)
 }
 
 
-// Sets "dead" flag
+/**
+ *  Sets the global "dead" flag.
+ */
 function setDead(dead)
 {
 	isDead = dead;
 }
 
 
-// Sets current level
+/**
+ *  Sets the current global level.
+ */
 function setLevel(key)
 {
 	level = key;
 }
 
 
-// Starts game
+/**
+ *  Starts a new game.
+ */
 function startGame(levelKey)
 {
-	// Kill "dead" colored graphics
 	destroyGraphicsDead();
-
-	// Clear all old enemy objects (if any)
 	destroyEnemies();
-
-	// Load all images defined under this level's enemy data
-	loadAssets();
-
-	// Set current level key
-	setLevel(levelKey);
-
-	// Clear "game over" text (if any)
 	destroyTextGameOver();
 
-	// Set background color
-	setBackgroundColor('#2167a5');
+	loadAssets();
 
-	// Reset "dead" flag
+	setLevel(levelKey);
+	setBackgroundColor(BACKGROUND_COLOR);
 	setDead(false);
 
-	// Add background sprite
 	addTiledSpriteBackground();
-
-	// Add Byleth, the player!
 	playAnimation(addSpritePlayer(PLAYER_X, PLAYER_Y), 'jump', false, 1);
-
-	// Add a lone cloud
 	addSpriteCloud();
-
-	// Add high score text
 	addTextScoreHigh();
-
-	// Add score text
 	addTextScore();
 
-	// Add overlay effects
 	addGroupOverlay();
 	addOverlayLower();
 	addOverlayUpper();
 
-	// Add tap emitter
 	addGroupEmitter();
 	addEmitterTap();
 }
 
 
-// Stops all enemies from moving
+/**
+ *  Stops all enemies from moving.
+ */
 function stopEnemies()
 {
 	groupEnemy.forEach(
-		function(e)
+		function(enemy)
 		{
-			e.body.stopMovement();
-			e.body.velocity.x = 0;
-			e.body.velocity.y = 0;
+			enemy.body.stopMovement();
+			enemy.body.velocity.x = 0;
+			enemy.body.velocity.y = 0;
 		}
 	)
 }
 
 
-// Stops all players from moving
+/**
+ *  Stops all players from moving.
+ */
 function stopPlayers()
 {
 	groupPlayer.forEach(
-		function(p)
+		function(player)
 		{
-			p.body.velocity.x = 0;
-			p.body.velocity.y = 0;
-			p.body.gravity.y = 0;
+			player.body.velocity.x = 0;
+			player.body.velocity.y = 0;
+			player.body.gravity.y = 0;
 		}
 	)
 }
@@ -715,43 +744,33 @@ function updateButtonDelay()
 {
 	if (isDead && buttonDelay !== 0)
 	{
-		if (buttonDelay > 0)
-		{
-			buttonDelay -= 1;
-		}
-		if (buttonDelay < 0)
-		{
-			buttonDelay = 0;
-		}
+		if (buttonDelay > 0) { buttonDelay -= 1; }
+		if (buttonDelay < 0) { buttonDelay = 0; }
 	}
 }
 
 
 /**
- *  Updates scrolling background
+ *  Updates scrolling background.
  */
 function updateSpriteBackground()
 {
 	if (!isDead)
 	{
-		var dx = SCROLL_SPEED * getMultiplier();
-		spriteBackground.tilePosition.x -= dx;
+		spriteBackground.tilePosition.x -= SCROLL_SPEED * getMultiplier();
 	}
 }
 
 
 /**
- *  Updates a single cloud sprite
+ *  Updates a single cloud sprite.
  */
 function updateSpriteCloud(sprite)
 {
 	try
 	{
-		var dx = RATIO * CLOUD_SPEED * getMultiplier();
-		var check = -1 * sprite.width;
-
-    	sprite.x -= dx;
-		if (sprite.x <= check)
+    	sprite.x -= RATIO * CLOUD_SPEED * getMultiplier();
+		if (sprite.x <= -sprite.width)
 		{
 			groupClouds.remove(sprite, true);
 			addSpriteCloud();
@@ -762,7 +781,7 @@ function updateSpriteCloud(sprite)
 
 
 /**
- *  Updates all cloud sprites
+ *  Updates all cloud sprites.
  */
 function updateGroupClouds()
 {
@@ -771,7 +790,7 @@ function updateGroupClouds()
 
 
 /**
- *  Updates a single enemy sprite
+ *  Updates a single enemy sprite.
  */
 function updateEnemy(sprite)
 {
@@ -779,20 +798,17 @@ function updateEnemy(sprite)
 	{
 		if (!isDead)
 		{
-			var time = 200;
-			var dx   = RATIO * -1 * ENEMY_SPEED * getMultiplier();
-			sprite.body.moveFrom(time, dx, 0);
+			var dx = RATIO * ENEMY_SPEED * getMultiplier();
+			sprite.body.moveFrom(200, -dx, 0);
 		}
-
-		var check = -1 * sprite.width;
-		if (sprite.x <= check) { groupEnemy.remove(sprite, true); }
+		if (sprite.x <= -sprite.width) { groupEnemy.remove(sprite, true); }
 	}
 	catch (e) {}
 }
 
 
 /**
- *  Updates all enemy sprites
+ *  Updates all enemy sprites.
  */
 function updateGroupEnemies()
 {
@@ -803,28 +819,27 @@ function updateGroupEnemies()
 
 		if (delayAddEnemy > 0) { delayAddEnemy -= 1; }
 
-		var randMin  = _LEVEL_DATA[level]['rate'][0];
-		var randMax  = _LEVEL_DATA[level]['rate'][1];
-		var randRate = _LEVEL_DATA[level]['rate'][2];
-		var randomly = randint(randMin, randMax) < randRate;
-		var isRoom   = groupEnemy.children.length < 3;
-		var noDelay  = delayAddEnemy <= 0;
+		var min     = _LEVEL_DATA[level]['rate'][0];
+		var max     = _LEVEL_DATA[level]['rate'][1];
+		var rate    = _LEVEL_DATA[level]['rate'][2];
+		var random  = randint(min, max) < rate;
+		var isRoom  = groupEnemy.children.length < 3;
+		var noDelay = delayAddEnemy <= 0;
 
 		// Randomly spawn a new enemy if there's room and delay is inactive
-		if (isRoom && randomly && noDelay)
+		if (isRoom && random && noDelay)
 		{
-			var enemyKey = randomChoice(_LEVEL_DATA[level]['enemy']);
+			var key = randomChoice(_LEVEL_DATA[level]['enemy']);
 			var doAdd = true;
+
 			groupEnemy.forEach(
-				function(e)
-				{
-					if (e.name === enemyKey) { doAdd = false; }
-				},
+				function(enemy) { if (enemy.name === key) { doAdd = false; } },
 				this
 			);
+
 			if (doAdd)
 			{
-				addSpriteEnemy(enemyKey);
+				addSpriteEnemy(key);
 				delayAddEnemy = DELAY_ADD_ENEMY;
 			}
 		}
@@ -833,7 +848,7 @@ function updateGroupEnemies()
 
 
 /**
- *  Updates player-to-ground collisions
+ *  Updates player-to-ground collisions.
  */
 function updateCollisionPlayerEnemy()
 {
@@ -870,8 +885,7 @@ function updateScore()
 	if (!isDead)
 	{
 		score += DELTA_SCORE;
-		var text = padLeft(Math.round(score), 5);
-		textScore.text = text;
+		textScore.text = padLeft(Math.round(score), 5);
 	}
 }
 
@@ -884,15 +898,14 @@ function updateScoreHigh()
 	if (!isDead && score > scoreHigh)
 	{
 		scoreHigh = score;
-		var text = 'HI ' + padLeft(Math.round(scoreHigh), 5);
-		textScoreHigh.text = text;
+		textScoreHigh.text = 'HI ' + padLeft(Math.round(scoreHigh), 5);
 	}
 
 }
 
 
 /**
- *  Preload callback
+ *  Preload callback.
  */
 function preload()
 {
@@ -914,7 +927,7 @@ function preload()
 	game.load.spritesheet('button', 'assets/restart.png', 36, 32);
 	game.load.spritesheet('tap', 'assets/sparkle.png', 11, 11);
 
-	// Load images
+	// Load other images
 	game.load.image('crest', 'assets/crest.png');
 	game.load.image('cloud', 'assets/cloud.png');
 	game.load.image('overlay-upper', 'assets/upper.png');
@@ -923,56 +936,33 @@ function preload()
 	// Load all images defined under background data
 	for (const entry of Object.entries(_BG_DATA))
 	{
-		var key = entry[0];
-		var image = entry[1]['image'];
-		game.load.image(key, image);
+		game.load.image(entry[0], entry[1]['image']);
 	}
 }
 
 
 /**
- *  Create callback
+ *  Create callback.
  */
 function create()
 {
-	// Add crest sprite
 	addSpriteCrest();
-
-	// Add cloud group
 	addGroupCloud();
-
-	// Add background group
 	addGroupBackground();
-
-	// Add "dead" graphics group
 	addGroupDead();
-
-	// Add button group
 	addGroupButton();
-
-	// Add enemy group
 	addGroupEnemy();
-
-	// Add player group
 	addGroupPlayer();
-
-	// Add text group
 	addGroupText();
-
-	// Add overlay group
 	addGroupOverlay();
-
-	// Starts game
-	var levelKey = 'basic';
-	startGame(levelKey);
-
-	// Process jump on input down
 	addInput();
+
+	startGame('basic');
 }
 
 
 /**
- *  Render callback
+ *  Render callback.
  */
 function render()
 {
@@ -989,7 +979,7 @@ function render()
 
 
 /**
- *  Update callback
+ *  Update callback.
  */
 function update()
 {

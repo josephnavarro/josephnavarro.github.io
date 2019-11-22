@@ -1,8 +1,9 @@
 // Display constants
-const RATIO  = window.devicePixelRatio;
-const WIDTH  = 540;
-const HEIGHT = 853;
-const TARGET = 'phaser-example';
+const BACKGROUND_COLOR = '#2167a5';
+const RATIO            = window.devicePixelRatio;
+const WIDTH            = 540;
+const HEIGHT           = 853;
+const TARGET           = 'phaser-example';
 
 // Button constants
 const BUTTON_DELAY = 50;
