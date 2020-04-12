@@ -36,6 +36,7 @@ var textScoreHigh;
 
 var buttonDelay   = 0;
 var delayAddEnemy = 0;
+var enemyChoices  = [];
 var hasAddTap     = false;
 var hasLoaded     = false;
 var isContact     = false;
@@ -617,7 +618,7 @@ function loadAssets() {
 	game.load.onLoadComplete.add(loadComplete, this);
 
 	// Load enemies defined for this level
-	for (const enemy of getLevelEnemies(level)) {
+	for (const enemy of enemyChoices) {
 		game.load.image(enemy, getEnemySprite(enemy));
 	}
 
@@ -674,6 +675,8 @@ function startGame(levelKey) {
 	destroyGraphicsDead();
 	destroyEnemies();
 	destroyTextGameOver();
+	
+	enemyChoices = randomChoice(_LEVEL_DATA[level]["enemies"]);
 
 	loadAssets();
 
@@ -802,7 +805,7 @@ function updateGroupEnemies() {
 
 		// Randomly spawn a new enemy if there's room and delay is inactive
 		if (isRoom && random && noDelay) {
-			var key = randomChoice(_LEVEL_DATA[level]['enemy']);
+			var key = randomChoice(enemyChoices);
 			var doAdd = true;
 
 			groupEnemy.forEach(
@@ -906,6 +909,8 @@ function preload() {
 	for (const entry of Object.entries(_BG_DATA)) {
 		game.load.image(entry[0], entry[1]['image']);
 	}
+	
+	enemyChoices = randomChoice(_LEVEL_DATA[level]["enemies"]);
 }
 
 

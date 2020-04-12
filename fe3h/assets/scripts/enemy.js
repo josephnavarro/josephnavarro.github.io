@@ -292,11 +292,11 @@ const _ENEMY_DATA = {
 		"image": "assets/enemy/petra_2.png"
 	},
 	"raphael-1": {
-		"body": [0, 0, 32, 32],
+		"body": [1, 9, 13, 11],
 		"image": "assets/enemy/raphael_1.png"
 	},
 	"raphael-2": {
-		"body": [0, 0, 32, 32],
+		"body": [1, 9, 13, 11],
 		"image": "assets/enemy/raphael_2.png"
 	},
 	"rhea-1": {
@@ -324,11 +324,11 @@ const _ENEMY_DATA = {
 		"image": "assets/enemy/sothis.png"
 	},
 	"sylvain-1": {
-		"body": [0, 0, 32, 32],
+		"body": [1, 9, 13, 11],
 		"image": "assets/enemy/sylvain_1.png"
 	},
 	"sylvain-2": {
-		"body": [0, 0, 32, 32],
+		"body": [1, 9, 13, 11],
 		"image": "assets/enemy/sylvain_2.png"
 	},
 	"the-immaculate-one": {

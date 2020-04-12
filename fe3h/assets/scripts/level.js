@@ -1,6 +1,38 @@
 const _LEVEL_DATA = {
 	"basic": {
 		"background": "monastery",
+		"enemies": [
+		    [
+			    "bernadetta-1",
+				"caspar-1",
+				"dorothea-1",
+				"edelgard-1",
+				"ferdinand-1",
+				"hubert-1",
+				"linhardt-1",
+				"petra-1"
+			],
+			[
+			    "annette-1",
+				"ashe-1",
+				"dedue-1",
+				"dimitri-1",
+				"felix-1",
+				"ingrid-1",
+				"mercedes-1",
+				"sylvain-1"
+			],
+			[
+			    "claude-1",
+				"hilda-1",
+				"ignatz-1",
+				"leonie-1",
+				"lorenz-1",
+				"lysithea-1",
+				"marianne-1",
+				"raphael-1"
+			]
+		],
 		"enemy": [
 			//"altered-demonic-beast",
 			//"altered-golem",
@@ -16,6 +48,13 @@ const _LEVEL_DATA = {
 			//"giant-wolf",
 			//"golem",
 			//"hegemon-husk",
+			//"lord-of-the-desert",
+			//"lord-of-the-lake",
+			//"the-immaculate-one",
+			//"titanus",
+			//"wandering-beast",
+			//"white-beast",
+			//"wild-demonic-beast",
 
 			//"alois",
 			//"annette-1",
@@ -63,8 +102,6 @@ const _LEVEL_DATA = {
 			//"leonie-2",
 			"linhardt-1",
 			//"linhardt-2",
-			//"lord-of-the-desert",
-			//"lord-of-the-lake",
 			//"lorenz-1",
 			//"lorenz-2",
 			//"lysithea-1",
@@ -75,6 +112,18 @@ const _LEVEL_DATA = {
 			//"mercedes-1",
 			//"mercedes-2",
 			"petra-1",
+			//"petra-2",
+			//"raphael-1",
+			//"raphael-2",
+			//"rhea-1",
+			//"rhea-2",
+			//"seteth-1",
+			//"seteth-2",
+			//"shamir",
+			//"sothis",
+			//"sylvain-1",
+			//"sylvain-2",
+			
 		],
 		"rate": [0, 100, 2]
 	}
